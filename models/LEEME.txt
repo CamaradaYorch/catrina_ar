@@ -1,0 +1,9 @@
+Coloca aquí el archivo del modelo, con este nombre exacto:
+
+  models/face_landmarker.task
+
+Descárgalo una sola vez desde:
+  https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task
+
+(En el navegador: abre el enlace y guarda el archivo, o con: curl -o models/face_landmarker.task <enlace>)
+Sin este archivo el filtro no dibuja la Catrina y se ve solo el video.

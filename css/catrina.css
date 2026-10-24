@@ -1,0 +1,4 @@
+/* Ajustes de identidad de CATRINA AR (se carga después de styles.css) */
+:root { --amber: #ff8a00; --bg: #120a14; --card: #1d1222; --line: #3a2342; }
+.logo-emoji { display: inline-block; font-size: 72px; line-height: 1; }
+.brand .logo-emoji { font-size: 28px; }

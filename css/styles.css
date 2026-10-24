@@ -1,0 +1,927 @@
+/* ==================================================
+   PIXELATE — CENTRO CULTURAL TEOPANZOLCO
+   HOJA DE ESTILOS PRINCIPAL
+   ==================================================
+
+   ÍNDICE DE SECCIONES:
+   01. Base y variables globales
+   02. Pantalla de carga (Splash Screen)
+   03. Pantalla de cámara
+   04. Barra superior y marca PIXELATE
+   05. Indicador de grabación y estado
+   06. Controles de captura
+   07. Footer: créditos y legal
+   08. Botones
+   09. Vista previa y modal
+   10. Páginas legales
+   11. Responsive y adaptabilidad móvil
+
+   ================================================== */
+
+
+/* ============ 01. BASE Y VARIABLES GLOBALES ============ */
+
+:root {
+  --amber: #f59e0b;
+  --bg: #0c0a09;
+  --card: #18181b;
+  --line: #292524;
+  --text: #f5f5f4;
+  --muted: #a8a29e;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+  background: #000;
+  overscroll-behavior: none; /* Bloquea el efecto de rebote al arrastrar en móviles */
+}
+
+body {
+  font-family: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: #000;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+}
+
+/* Clases utilitarias globales */
+.hidden {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+/* Configuración de íconos SVG */
+.icon {
+  width: 1.25em;
+  height: 1.25em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+
+.icon--fill {
+  fill: currentColor;
+  stroke: none;
+}
+
+.icon--lg {
+  width: 30px;
+  height: 30px;
+}
+
+
+/* ============ 02. PANTALLA DE CARGA (SPLASH SCREEN) ============ */
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 1;
+  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+/* Estado cuando la pantalla de carga desaparece */
+.splash--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.splash__content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.splash__logo {
+  width: clamp(80px, 20vw, 120px);
+  height: clamp(80px, 20vw, 120px);
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  animation: logoPulse 2s infinite ease-in-out;
+}
+
+.splash__title {
+  font-size: clamp(24px, 5vw, 32px);
+  letter-spacing: .1em;
+  color: #fff;
+}
+
+.splash__subtitle {
+  font-size: clamp(10px, 2vw, 12px);
+  color: var(--muted);
+  max-width: 280px;
+  letter-spacing: .05em;
+  margin-bottom: 4px;
+}
+
+.splash__credits-text {
+  margin: 0 0 16px 0;
+}
+
+.splash__text {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #d6d3d1;
+  background: none;
+  border: 0;
+  margin-top: 15px;
+  padding: 14px 22px;           /* área táctil grande */
+  opacity: 0;                   /* oculta mientras corre la animación del splash */
+  pointer-events: none;
+}
+/* Se activa por JS a los 2 s (= un ciclo completo de logoPulse) */
+.splash.is-ready .splash__text {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: arcadeBlink 1s infinite steps(1);
+}
+.splash.is-starting .splash__text {
+  animation: none;
+  opacity: 1;
+  color: var(--amber);
+}
+
+/* Indicador de carga giratorio ámbar */
+.splash__loader {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(245, 158, 11, .15);
+  border-top-color: var(--amber);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 5px;
+}
+
+/* Animación de parpadeo estilo arcade / retro */
+@keyframes arcadeBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* ===== TV antigua: el splash se APAGA (colapsa a una línea)... ===== */
+.splash.splash--crt-off {
+  pointer-events: none;
+  transition: none;
+  animation: crtTurnOff 0.38s cubic-bezier(.7, 0, .84, 0) forwards;
+}
+@keyframes crtTurnOff {
+  0%   { transform: scale(1, 1);      filter: brightness(1); opacity: 1; }
+  55%  { transform: scale(1, 0.006);  filter: brightness(9); opacity: 1; }
+  100% { transform: scale(0, 0.006);  filter: brightness(14); opacity: 0; }
+}
+
+/* ===== ...y la app se ENCIENDE (línea que se abre + destello) ===== */
+@keyframes crtTurnOn {
+  0%   { transform: scale(0, 0.006);  filter: brightness(14); opacity: 1; }
+  35%  { transform: scale(1, 0.006);  filter: brightness(10); opacity: 1; }
+  75%  { transform: scale(1, 1.03);   filter: brightness(2.5); opacity: 1; }
+  100% { transform: scale(1, 1);      filter: brightness(1);   opacity: 1; }
+}
+.camera-crt-reveal {
+  animation: crtTurnOn 0.85s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+/* Líneas de barrido + viñeta + parpadeo sobre toda la pantalla */
+.crt {
+  position: fixed;
+  inset: 0;
+  z-index: 90;                  /* debajo del splash (100) */
+  pointer-events: none;
+  opacity: 0;
+  background:
+    repeating-linear-gradient(to bottom,
+      rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.30) 3px),
+    radial-gradient(ellipse at center, rgba(255,255,255,.07) 0%, rgba(0,0,0,.55) 100%);
+}
+.crt.is-active { animation: crtFlicker 1.5s ease-out forwards; }
+@keyframes crtFlicker {
+  0%   { opacity: 1; }
+  20%  { opacity: .85; }
+  32%  { opacity: 1; }
+  48%  { opacity: .65; }
+  62%  { opacity: .85; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash.splash--crt-off, .camera-crt-reveal, .crt.is-active { animation: none; }
+}
+
+/* ============ 03. PANTALLA DE CÁMARA ============ */
+
+.stage {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  background: #000;
+  overflow: hidden;
+}
+
+#pixelCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  object-position: center center;
+}
+
+/* Cuando la cámara frontal está activa, cambia a contain para eliminar el zoom excesivo */
+body.is-front #pixelCanvas {
+  object-fit: contain;
+  background: #000;
+}
+
+
+/* ============ 04. BARRA SUPERIOR Y MARCA PIXELATE ============ */
+
+.topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: calc(env(safe-area-inset-top) + 12px) 14px 28px;
+  background: linear-gradient(rgba(0, 0, 0, .6), transparent);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.brand__logo {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, .2);
+  border: 1px solid rgba(245, 158, 11, .45);
+}
+
+.brand__image {
+  display: block;
+  width: clamp(42px, 8vw, 60px);
+  height: clamp(42px, 8vw, 60px);
+  flex: 0 0 auto;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 6px;
+}
+
+.brand__text {
+  min-width: 0;
+}
+
+.brand__text h1 {
+  font-size: clamp(16px, 3vw, 22px);
+  line-height: 1.2;
+  letter-spacing: .08em;
+}
+
+.brand__text p {
+  max-width: 210px;
+  font-size: clamp(8px, 1.8vw, 11px);
+  line-height: 1.35;
+  letter-spacing: .05em;
+  color: #d6d3d1;
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.round {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, .45);
+  border: 1px solid rgba(255, 255, 255, .2);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--amber);
+}
+
+.round--lg {
+  width: 46px;
+  height: 46px;
+  margin-bottom: 20px;
+}
+
+
+/* ============ 05. INDICADOR DE GRABACIÓN Y ESTADO ============ */
+
+.rec {
+  position: absolute;
+  z-index: 2;
+  top: calc(env(safe-area-inset-top) + 85px);
+  left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(220, 38, 38, .92);
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  animation: pulse 1.2s infinite;
+}
+
+.rec__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.status {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom) + 150px);
+  padding: 0 16px;
+  text-align: center;
+  font-size: 12px;
+  color: #e7e5e4;
+  text-shadow: 0 1px 4px #000;
+  pointer-events: none;
+}
+
+
+/* ============ 06. CONTROLES DE CAPTURA ============ */
+
+.controls {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 26px;
+  padding: 48px 16px calc(env(safe-area-inset-bottom) + 30px);
+  background: linear-gradient(transparent, rgba(0, 0, 0, .65));
+}
+
+.shutter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 0;
+  font-size: 12px;
+  font-weight: 600;
+  text-shadow: 0 1px 4px #000;
+  transition: transform .1s;
+}
+
+.shutter:active {
+  transform: scale(.94);
+}
+
+.shutter__ring {
+  padding: 4px;
+  border: 3px solid var(--c);
+  border-radius: 50%;
+}
+
+.shutter__core {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--c);
+  display: grid;
+  place-items: center;
+}
+
+.shutter--photo {
+  --c: var(--amber);
+}
+
+.shutter--photo .shutter__core {
+  color: #18181b;
+}
+
+.shutter--video {
+  --c: #dc2626;
+}
+
+.shutter--video .shutter__core {
+  color: #fff;
+}
+
+/* Indicador de desplazamiento hacia el footer */
+.hint {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 4px);
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, .7);
+  animation: bob 1.8s infinite;
+}
+
+
+/* ============ 07. FOOTER: CRÉDITOS Y LEGAL ============ */
+
+.footer {
+  padding: 36px 20px calc(env(safe-area-inset-bottom) + 32px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.footer__credits {
+  font-size: 14px;
+  color: #d6d3d1;
+}
+
+.footer__credits strong {
+  color: var(--amber);
+}
+
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.footer__legal a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer__note {
+  font-size: 11px;
+  color: #78716c;
+  max-width: 320px;
+}
+
+
+/* ============ 08. BOTONES ============ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid #44403c;
+  background: #1c1917;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #292524;
+}
+
+.btn--wa {
+  background: #059669;
+  border-color: #059669;
+}
+
+.btn--x {
+  background: #000;
+  border-color: #57534e;
+}
+
+.btn--at {
+  padding: 6px;
+  background: #fff;
+  border-color: #fff;
+}
+
+.btn--at:hover {
+  background: #e7e5e4;
+}
+
+.btn--at img {
+  display: block;
+  height: 40px;
+  width: auto;
+  border-radius: 6px;
+}
+
+.btn--dl {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: #000;
+}
+
+
+/* ============ 09. VISTA PREVIA Y MODAL ============ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, .9);
+}
+
+.modal__card {
+  width: 100%;
+  max-width: 380px;
+  max-height: 96dvh;
+  overflow: auto;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal__head h3 {
+  font-size: 13px;
+  color: var(--amber);
+}
+
+.modal__close {
+  background: none;
+  border: 0;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.modal__media {
+  background: #000;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+.modal__media img,
+.modal__media video {
+  max-width: 100%;
+  max-height: 55dvh;
+  object-fit: contain;
+}
+
+.modal__note {
+  min-height: 16px;
+  font-size: 11px;
+  text-align: center;
+  color: var(--amber);
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.modal__actions .btn {
+  flex: 1;
+  padding: 10px 6px;
+  font-size: 12px;
+  justify-content: center;
+}
+
+
+/* ============ 10. PÁGINAS LEGALES ============ */
+
+.doc {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: calc(env(safe-area-inset-top) + 24px) 20px 48px;
+  line-height: 1.7;
+  color: #d6d3d1;
+}
+
+.doc__back {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--amber);
+}
+
+.doc h1 {
+  font-size: 26px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.doc .doc__date {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.doc h2 {
+  font-size: 17px;
+  color: var(--amber);
+  margin: 28px 0 8px;
+}
+
+.doc p,
+.doc ul {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.doc ul {
+  padding-left: 20px;
+}
+
+.doc li {
+  margin-bottom: 6px;
+}
+
+.doc strong {
+  color: #fff;
+}
+
+.doc__summary {
+  background: rgba(245, 158, 11, .1);
+  border: 1px solid rgba(245, 158, 11, .35);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.doc__gh {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: #1c1917;
+  border: 1px solid #44403c;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.doc__gh:hover {
+  background: #292524;
+}
+
+.doc__footer {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+
+/* ============ 11. RESPONSIVE Y ADAPTABILIDAD MÓVIL ============ */
+
+@media (max-width: 480px) {
+  .topbar {
+    gap: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .brand {
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .brand__image {
+    width: 44px;
+    height: 44px;
+  }
+
+  .brand__text {
+    min-width: 0;
+  }
+
+  .brand__text h1 {
+    font-size: 16px;
+  }
+
+  .brand__text p {
+    max-width: 150px;
+    font-size: 8px;
+    letter-spacing: .03em;
+  }
+
+  .tools {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .round {
+    width: 36px;
+    height: 36px;
+  }
+
+  .controls {
+    gap: 18px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .shutter__core {
+    width: 56px;
+    height: 56px;
+  }
+
+  .icon--lg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .modal__actions {
+    gap: 6px;
+  }
+
+  .modal__actions .btn {
+    padding: 9px 4px;
+    font-size: 11px;
+  }
+}
+
+/* Pantallas muy estrechas (menores a 360px) */
+@media (max-width: 360px) {
+  .topbar {
+    gap: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .brand__image {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand__text h1 {
+    font-size: 14px;
+  }
+
+  .brand__text p {
+    max-width: 125px;
+    font-size: 7px;
+    letter-spacing: .02em;
+    overflow-wrap: break-word;
+  }
+
+  .tools {
+    gap: 4px;
+  }
+
+  .round {
+    width: 32px;
+    height: 32px;
+  }
+
+  .controls {
+    gap: 12px;
+  }
+
+  .shutter__core {
+    width: 50px;
+    height: 50px;
+  }
+
+  .icon--lg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .round--lg {
+    width: 38px;
+    height: 38px;
+  }
+
+  .status {
+    font-size: 11px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+
+/* ============ ANIMACIONES GLOBALES (KEYFRAMES) ============ */
+
+@keyframes pulse {
+  50% {
+    opacity: .65;
+  }
+}
+
+@keyframes bob {
+  50% {
+    transform: translate(-50%, 4px);
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+/* ============ AVISO PARA NAVEGADORES INTERNOS ============ */
+.gate { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(0,0,0,.95); overflow-y: auto; }
+.gate__card { width: 100%; max-width: 360px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.gate__logo { width: 72px; height: 72px; object-fit: contain; image-rendering: pixelated; }
+.gate__card h2 { font-size: 20px; color: var(--amber); }
+.gate__card p { font-size: 14px; line-height: 1.6; color: #d6d3d1; }
+.gate__card .btn { width: 100%; }
+.gate__copy { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.gate__copy input { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #44403c; background: #1c1917; color: var(--text); font: inherit; font-size: 12px; text-align: center; }
+.gate__steps { width: 100%; padding-left: 20px; text-align: left; font-size: 13px; line-height: 1.6; color: #d6d3d1; }
+.gate__steps:empty { display: none; }
+.gate__skip { background: none; border: 0; color: var(--muted); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; padding: 6px; }
