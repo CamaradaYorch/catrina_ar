@@ -19,7 +19,7 @@ const CONFIG = {
   MAX_FACES: 3,                // Rostros simultáneos (más rostros = más carga en celulares de gama media)
   DETECT_EVERY_MS: 66,         // Pausa mínima entre detecciones (66 ms ≈ 15 por segundo)
   FACE_INPUT_SIDE: 480,        // Lado largo de la imagen que ve el modelo (menor = más rápido)
-  FACE_MODEL: '/models/face_landmarker.task',   // Modelo alojado en este sitio (ver models/LEEME.txt)
+  FACE_MODEL: 'models/face_landmarker.task',   // Modelo alojado en este sitio (ver models/LEEME.txt)
   MEDIAPIPE_MJS: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs',
   MEDIAPIPE_WASM: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm',
   MAX_CANVAS_SIDE: 1280,       // Resolución máxima del lado más largo para la foto o video final (en píxeles)
