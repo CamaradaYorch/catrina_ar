@@ -22,3 +22,6 @@ MAX_FACES (rostros), DETECT_EVERY_MS y FACE_INPUT_SIDE (rendimiento), SHARE_TEXT
 
 ## Terceros declarados en privacidad.html
 jsDelivr (librería y WASM de MediaPipe) y Google Fonts. El modelo va en tu propio sitio.
+
+## Estilos por rostro (js/anthropometry.js)
+Cada rostro recibe su propio estilo: mujer = Catrina (catrina-femenina.js), hombre = Catrín (catrin.js), niñas y niños = Little Catrín (catrin-little.js). Tocar un rostro cambia su estilo a mano. Con `#debug` al final de la dirección se muestran las medidas para calibrar `CONFIG.ANTRO` (js/config.js).

@@ -22,6 +22,15 @@ const CONFIG = {
   FACE_MODEL: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',   // Modelo alojado en este sitio (ver models/LEEME.txt)
   MEDIAPIPE_MJS: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs',
   MEDIAPIPE_WASM: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm',
+  // Clasificación por rostro (valores INICIALES sin calibrar: se afinan con #debug al final de la dirección)
+  ANTRO: {
+    ahMin: 0.86, ahMax: 0.98,          // ancho/alto del rostro: más alto = más infantil
+    tercioMax: 0.34, tercioMin: 0.29,  // nariz-barbilla / alto: más bajo = más infantil
+    mandMin: 0.62, mandMax: 0.72,      // mandíbula / ancho: más alto = más masculino
+    cejaMax: 0.42, cejaMin: 0.30,      // ceja-ojo / distancia entre ojos: más bajo = más masculino
+    umbralNino: 0.6, umbralMasc: 0.5,  // por encima de este puntaje se asigna el estilo
+    suavizado: 0.08                    // qué tan rápido cambia el puntaje (menor = más estable)
+  },
   MAX_CANVAS_SIDE: 1280,       // Resolución máxima del lado más largo para la foto o video final (en píxeles)
   FILE_PREFIX: 'catrina-ar',     // Prefijo asignado en el nombre de los archivos multimedia descargados
   REAR_ZOOM: 1,                // Zoom de la cámara trasera (1 = sin zoom; 0.5 = más abierto, si el dispositivo lo permite)

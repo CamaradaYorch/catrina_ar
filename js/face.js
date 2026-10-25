@@ -17,7 +17,8 @@ async function initFace() {
   face.loading = true;
   try {
     // 1) El archivo del modelo debe existir en el sitio (si no, se avisa con el nombre exacto)
-    const head = await fetch(CONFIG.FACE_MODEL, { method: 'HEAD' }).catch(() => null);
+    const externo = /^https?:/.test(CONFIG.FACE_MODEL);
+    const head = externo ? { ok: true, headers: new Headers() } : await fetch(CONFIG.FACE_MODEL, { method: 'HEAD' }).catch(() => null);
     const type = head ? (head.headers.get('content-type') || '') : '';
     if (!head || !head.ok || type.includes('text/html')) {
       throw new Error('FALTA_MODELO');
