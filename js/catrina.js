@@ -1,12 +1,8 @@
 /* ==================================================
    CATRINA AR
-   MÓDULO: BUCLE DE DIBUJO (cámara -> rostros -> estilo de cada rostro -> maquillaje)
-   ==================================================
-   Cada rostro recibe su propio estilo (ver anthropometry.js):
-   catrina (mujer) · catrin (hombre) · little (niñas y niños).
+   MÓDULO: BUCLE DE DIBUJO (cámara -> rostros -> maquillaje)
    ================================================== */
 
-const RENDERERS = { catrina: dibujarCatrinaFemenina, catrin: dibujarCatrin, little: dibujarCatrinLittle };
 /* ============ BUCLE DE DIBUJO ============ */
 let sizedAspect = 0;
 
@@ -29,5 +25,5 @@ function render() {
 
   drawCover(ctx, video, canvas.width, canvas.height);   // 1) cámara a pantalla completa
   detectFaces();                                         // 2) puntos de la cara
-  for (const pts of face.faces) drawCatrina(ctx, pts, canvas.width, canvas.height, currentStyle);   
+  face.faces.forEach(pts => dibujarMaquillaje(ctx, pts, canvas.width, canvas.height));   // 3) maquillaje en cada rostro
 }
