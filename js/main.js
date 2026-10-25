@@ -102,6 +102,7 @@ let appLaunched = false;
 
 // Prepara la IA y el bucle de dibujo desde ya (no usan cámara hasta que haya video)
 initFace();
+initMalla();
 requestAnimationFrame(render);
 
 // Mensaje de estado vacío mientras el splash esté visible

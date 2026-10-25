@@ -22,6 +22,8 @@ const CONFIG = {
   FACE_MODEL: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',   // Modelo alojado en este sitio (ver models/LEEME.txt)
   MEDIAPIPE_MJS: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs',
   MEDIAPIPE_WASM: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm',
+  TEXTURA_SVG: 'assets/catrina-textura.svg',   // Diseño del maquillaje sobre la malla (ver README)
+  TEXTURA_PX: 1024,            // Resolución a la que se rasteriza el SVG (512 en celulares muy lentos)
   MAX_CANVAS_SIDE: 1280,       // Resolución máxima del lado más largo para la foto o video final (en píxeles)
   FILE_PREFIX: 'catrina-ar',     // Prefijo asignado en el nombre de los archivos multimedia descargados
   REAR_ZOOM: 1,                // Zoom de la cámara trasera (1 = sin zoom; 0.5 = más abierto, si el dispositivo lo permite)

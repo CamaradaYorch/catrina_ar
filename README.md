@@ -24,4 +24,5 @@ MAX_FACES (rostros), DETECT_EVERY_MS y FACE_INPUT_SIDE (rendimiento), SHARE_TEXT
 jsDelivr (librería y WASM de MediaPipe) y Google Fonts. El modelo va en tu propio sitio.
 
 ## Maquillaje
-Un solo diseño vectorial en `js/maquillaje.js` (paleta `COLOR` al inicio). Se aplica a cada rostro detectado, hasta `MAX_FACES`.
+- **Malla con textura (principal):** `assets/catrina-textura.svg` se estira sobre la malla facial (`js/malla.js`, datos en `js/malla-datos.js`, generados del `canonical_face_model.obj` de MediaPipe). El SVG está en el espacio UV: se diseña sobre `canonical_face_model_uv_visualization.png` como guía. Fondo transparente, 1024x1024, sin filtros ni imágenes incrustadas.
+- **Corona y respaldo:** `js/maquillaje.js` dibuja la corona de flores y, si la malla no carga, todo el maquillaje.

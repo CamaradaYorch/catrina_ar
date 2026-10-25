@@ -25,5 +25,7 @@ function render() {
 
   drawCover(ctx, video, canvas.width, canvas.height);   // 1) cámara a pantalla completa
   detectFaces();                                         // 2) puntos de la cara
-  face.faces.forEach(pts => dibujarMaquillaje(ctx, pts, canvas.width, canvas.height));   // 3) maquillaje en cada rostro
+  const W = canvas.width, H = canvas.height;
+  const conMalla = dibujarMalla(ctx, face.faces, W, H);                                    // 3) textura SVG sobre la malla (si está lista)
+  face.faces.forEach(pts => dibujarMaquillaje(ctx, pts, W, H, conMalla));                  // 4) corona (y el resto si no hay malla)
 }

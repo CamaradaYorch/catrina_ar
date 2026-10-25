@@ -30,7 +30,7 @@ function flor(c, x, y, r, tonos) {
 }
 
 /** Dibuja el maquillaje sobre un rostro. pts = 478 puntos normalizados; W, H = tamaño del canvas. */
-function dibujarMaquillaje(c, pts, W, H) {
+function dibujarMaquillaje(c, pts, W, H, soloCorona) {   // soloCorona: la malla con textura ya dibujó el resto
   const P = k => ({ x: pts[k].x * W, y: pts[k].y * H });
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const faceW = dist(P(234), P(454)), faceH = dist(P(10), P(152));
@@ -43,6 +43,8 @@ function dibujarMaquillaje(c, pts, W, H) {
 
   c.save();
   c.lineJoin = c.lineCap = 'round';
+
+  if (!soloCorona) {
 
   // 1) Base blanca con sombra azulada en la mandíbula
   camino(OVALO);
@@ -121,6 +123,8 @@ function dibujarMaquillaje(c, pts, W, H) {
   c.fillStyle = COLOR.tinta;
   for (let n = 0; n < 6; n++) { const t = n * TAU / 6 + roll; c.beginPath(); c.ellipse(ch.x + Math.cos(t) * faceW * 0.03, ch.y + Math.sin(t) * faceW * 0.03, faceW * 0.028, faceW * 0.016, t, 0, TAU); c.fill(); }
   c.fillStyle = COLOR.base; punto(ch, faceW * 0.012, true);
+
+  }
 
   // 7) Corona: hojas y flores en arco sobre la frente
   const cen = at(P(10), 0, faceH * 0.28), rxc = faceW * 0.66, ryc = faceH * 0.62, N = 9;
