@@ -6,7 +6,7 @@
    ÍNDICE:
    01. Configuración Inicial de Etiquetas y Accesibilidad (ARIA)
    02. Enlace de Eventos de la Interfaz Principal (Cámara y Controles)
-   03. Manejador del Botón Global para Compartir la Aplicación
+   03. Compartir la Aplicación (nombre CatrinART y botón de la cabecera)
    04. Enlace de Eventos del Modal de Vista Previa y Accesibilidad por Teclado
    05. Funciones de Interfaz, Splash Screen y Secuencia de Arranque
 
@@ -43,33 +43,10 @@ $('btnToggleMirror').addEventListener('click', () => {
 $('btnFlipCamera').addEventListener('click', flipCamera);
 
 
-/* ============ 03. MANEJADOR DEL BOTÓN GLOBAL PARA COMPARTIR LA APLICACIÓN ============ */
-// Utiliza el operador opcional "?." para evitar errores si el botón aún no existe en el DOM
-$('btnShare')?.addEventListener('click', async () => {
-  // Estructura de datos que se enviará al sistema operativo
-  const shareData = {
-    title: 'CatrinART',
-    text: '¡Mira esta experiencia interactiva de realidad aumentada!',
-    url: window.location.href
-  };
-
-  try {
-    // Si el navegador soporta la API nativa de compartir, abre el menú del sistema
-    if (navigator.share) {
-      await navigator.share(shareData);
-    } else {
-      // Como alternativa en PC, copia directamente el enlace al portapapeles
-      await navigator.clipboard.writeText(window.location.href);
-      if (typeof setStatus === 'function') {
-        setStatus('¡Enlace copiado al portapapeles!', 3000); // Notificación flotante temporal
-      } else {
-        alert('¡Enlace copiado al portapapeles!'); // Alerta de respaldo estándar
-      }
-    }
-  } catch (err) {
-    console.log('Error al compartir:', err); // Registro silencioso de cancelación o error
-  }
-});
+/* ============ 03. COMPARTIR LA APLICACIÓN (nombre «CatrinART» y botón de la cabecera) ============ */
+// Los dos copian el mensaje amistoso con el enlace de la app (CONFIG.SITE_URL) y abren el menú de compartir.
+$('btnBrandShare')?.addEventListener('click', shareApp);
+$('btnShare')?.addEventListener('click', shareApp);
 
 
 /* ============ 04. EVENTOS DEL MODAL DE VISTA PREVIA Y TECLADO ============ */
@@ -103,6 +80,7 @@ let appLaunched = false;
 // Prepara la IA y el bucle de dibujo desde ya (no usan cámara hasta que haya video)
 initFace();
 initMalla();
+initDiseno();
 requestAnimationFrame(render);
 
 // Mensaje de estado vacío mientras el splash esté visible
@@ -123,7 +101,7 @@ async function launchApp() {
   appLaunched = true;
 
   splashStart.disabled = true;
-  splashStart.textContent = '> ENCENDIENDO <';
+  splashStart.textContent = '> MIQUIXTLI <';
   splash.classList.add('is-starting');
   if (typeof playPixelSound === 'function') playPixelSound('poweron');
 

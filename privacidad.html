@@ -23,7 +23,7 @@
   <h2>1. Cómo funciona la app</h2>
   <ul>
     <li>Al pulsar «Pulsa para comenzar», tu navegador te pide permiso para usar la <strong>cámara</strong>. Si grabas un video, también te pide el <strong>micrófono</strong>, solo en ese momento.</li>
-    <li>Un modelo de detección de rostros (MediaPipe Face Landmarker) se ejecuta <strong>dentro de tu navegador</strong>. Ubica los puntos de tu cara y dibuja encima el maquillaje de Catrina, cuadro por cuadro. El archivo del modelo se descarga desde este mismo sitio. No identifica a nadie ni estima género ni edad.</li>
+    <li>Un modelo de detección de rostros (MediaPipe Face Landmarker) se ejecuta <strong>dentro de tu navegador</strong>. Ubica los puntos de tu cara y dibuja encima el maquillaje de Catrina, cuadro por cuadro. El archivo del modelo se descarga una vez desde el almacenamiento público de Google (Google Cloud Storage); la descarga no incluye tus fotos ni videos. No identifica a nadie ni estima género ni edad.</li>
     <li>Las fotos y los videos se crean en la memoria de tu navegador. <strong>Solo salen de ahí si tú decides descargarlos o compartirlos.</strong> Al cerrar o recargar la página desaparecen.</li>
     <li>Los videos duran 10 segundos como máximo.</li>
   </ul>
@@ -37,7 +37,7 @@
   </ul>
 
   <h2>3. Servicios de terceros</h2>
-  <p>Para funcionar, la página descarga recursos de otros proveedores: <strong>jsDelivr</strong> (la librería y los archivos de ejecución de MediaPipe) y <strong>Google Fonts</strong> (la tipografía). Como en cualquier sitio web, estos proveedores y el servicio donde está alojada la página pueden registrar datos técnicos de la conexión, como la dirección IP y el tipo de navegador, según sus propias políticas.</p>
+  <p>Para funcionar, la página descarga recursos de otros proveedores: <strong>jsDelivr</strong> (la librería y los archivos de ejecución de MediaPipe), <strong>Google Cloud Storage</strong> (el modelo de detección) y <strong>Google Fonts</strong> (la tipografía). Como en cualquier sitio web, estos proveedores y el servicio donde está alojada la página pueden registrar datos técnicos de la conexión, como la dirección IP y el tipo de navegador, según sus propias políticas.</p>
 
   <h2>4. Cuando compartes</h2>
   <p>Si usas los botones de WhatsApp o X, la foto o el video pasa a esa plataforma y se rige por sus políticas, fuera de nuestro control. La app solo prepara el archivo y el texto; la decisión de publicar es tuya.</p>

@@ -23,6 +23,8 @@ const CONFIG = {
   MEDIAPIPE_MJS: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs',
   MEDIAPIPE_WASM: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm',
   TEXTURA_SVG: 'assets/catrina-textura.svg',   // Diseño del maquillaje sobre la malla (ver README)
+  DISENO_COMPLETO: 'assets/catrina-diseno.png',   // Respaldo: diseño completo (calavera + flores) si la malla/textura no carga. Puedes usar un .svg o .png transparente
+  DISENO_FLORES: 'assets/catrina-flores.png',     // Solo las flores y hojas (sin calavera): se dibujan sobre la malla en lugar de las flores hechas con código
   TEXTURA_PX: 1024,            // Resolución a la que se rasteriza el SVG (512 en celulares muy lentos)
   MALLA_CUBRIR_OJOS: true,     // true: la textura cubre también los ojos (la calavera no deja ver los ojos reales)
   MALLA_CUBRIR_BOCA: false,    // false: al abrir la boca se ve la boca real; true: la textura la cubre también
@@ -33,11 +35,17 @@ const CONFIG = {
 
   /* ============ 02. CONFIGURACIÓN DE MENSAJES, HASHTAGS Y ENLACES SOCIALES ============ */
   // Texto predeterminado para compartir, compatible con saltos de línea (\n) y negritas (*texto*)
-  SHARE_TEXT: '¡Mi CatrinART! 💀🌼',
+  SHARE_TEXT: `*¡Ven al Centro Cultural Teopanzolco y crea tu propia CatrinART!* 💀
+
+¡Anímate a tomar la tuya, vive la tradición y compártela con todos tus amigos! ✨`,
+
+  HASHTAGS: ['CCT', 'CatrinART', 'Miquixtli'], // Etiquetas (hashtags) asociadas
+
+  // Mensaje amistoso al tocar el nombre «CatrinART» (o el botón de compartir de la cabecera). El enlace se agrega al final.
+  APP_SHARE_TITLE: 'CatrinART',
+  APP_SHARE_TEXT: `¡Hola! 💀🌼 Te invito a crear tu propia CatrinART con realidad aumentada, cortesía del Centro Cultural Teopanzolco. Es gratis y se usa desde tu celular. ¡Anímate y compártela con tus amigos! ✨`,
   
-  HASHTAGS: ['CatrinART', 'DiaDeMuertos'], // Etiquetas (hashtags) asociadas sin incluir el símbolo '#'
-  
-  SITE_URL: '',                                  // URL pública de despliegue (se incluye automáticamente al compartir enlaces)
+  SITE_URL: 'https://catrina-ar.netlify.app/',                               // URL pública de despliegue (se incluye automáticamente al compartir enlaces)
   
   X_INTENT_URL: 'https://x.com/intent/tweet', // URL base oficial para los intents de publicación en la red social X
   WHATSAPP_URL: 'https://api.whatsapp.com/send',   // URL base oficial para la API de mensajes de WhatsApp

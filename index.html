@@ -6,24 +6,35 @@
   <title>CatrinART</title>
   <meta name="description" content="Filtro de realidad aumentada de Catrina para Día de Muertos. Toma fotos, graba video y compártelos. Sin guardar tus datos.">
   <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#040c2c">
 
-  <!-- ============ METADATOS PARA COMPARTIR ============ -->
+<!-- ============ METADATOS PARA COMPARTIR ============ -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CatrinART">
   <meta property="og:locale" content="es_MX">
-  <meta property="og:title" content="CatrinART">
-  <meta property="og:description" content="CatrinART: maquillaje de Catrina en realidad aumentada para Día de Muertos.">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CatrinART">
-  <meta name="twitter:description" content="CatrinART: maquillaje de Catrina en realidad aumentada para Día de Muertos.">
+  <meta property="og:title" content="CatrinART - Centro Cultural Teopanzolco">
+  <meta property="og:description" content="¡Ven al Centro Cultural Teopanzolco y crea tu propia CatrinART en realidad aumentada para Día de Muertos!">
+  <meta property="og:url" content="https://catrina-ar.netlify.app/">
+  <meta property="og:image" content="https://catrina-ar.netlify.app/assets/preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
 
-  <!-- ============ ÍCONOS ============ -->
+  <!-- ============ METADATOS DE TWITTER / X ============ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CatrinART - Centro Cultural Teopanzolco">
+  <meta name="twitter:description" content="¡Ven al Centro Cultural Teopanzolco y crea tu propia CatrinART en realidad aumentada para Día de Muertos!">
+  <meta name="twitter:image" content="https://catrina-ar.netlify.app/assets/preview.jpg">
+
+  <!-- ============ ÍCONOS (favicon y logo: Catrinart.png) ============ -->
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/icons/icon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="img/icons/icon-180.png">
+  <link rel="manifest" href="manifest.webmanifest">
 
   <!-- ============ ESTILOS Y LIBRERÍAS ============ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/catrina.css">
   <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.js" crossorigin="anonymous"></script> -->
@@ -33,7 +44,7 @@
   <!-- ============ AVISO PARA NAVEGADORES INTERNOS (Facebook, Instagram, LinkedIn, TikTok…) ============ -->
   <div id="inAppGate" class="gate hidden" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
     <div class="gate__card">
-      <span class="logo-emoji" aria-hidden="true">💀</span>
+      <img class="gate__logo" src="img/logo.png" alt="" width="72" height="72">
       <h2 id="gateTitle">Ábrelo en tu navegador</h2>
       <p id="gateText"></p>
       <a id="gateOpen" class="btn btn--dl hidden" href="#">Abrir en mi navegador</a>
@@ -50,8 +61,9 @@
 <div id="splashScreen" class="splash">
   <div class="splash__content">
     <!-- Logo principal de la app -->
-    <span class="logo-emoji" aria-hidden="true">💀</span>
+    <img class="splash__logo" src="img/logo.png" alt="Logo de CatrinART" width="120" height="120">
     <h1 class="splash__title">CatrinART</h1>
+    <p class="splash__subtitle">Centro Cultural Teopanzolco</p>
     <!--<p class="splash__credits-text">
       <span style="color: var(--primary); font-weight: 700; font-size: 14px; letter-spacing: 1px;">AT arquitectos</span>
     </p>-->
@@ -83,10 +95,14 @@
     <!-- Barra superior -->
     <header class="topbar">
       <div class="brand">
-        <span class="logo-emoji" aria-hidden="true">💀</span>
+        <img class="brand__image" src="img/logo.png" alt="Logo de CatrinART" width="48" height="48">
         <div class="brand__text">
-          <h1>CatrinART</h1>
-          <!-- <p>Centro Cultural Teopanzolco</p> -->
+          <!-- Al tocar el nombre se copia el enlace y se abre el menú de compartir -->
+          <h1>
+            <button id="btnBrandShare" class="brand__title" type="button"
+              title="Toca para compartir CatrinART" aria-label="Compartir CatrinART con tus amigos">CatrinART</button>
+          </h1>
+          <p>Centro Cultural Teopanzolco</p>
         </div>
       </div>
 
@@ -190,17 +206,6 @@
 
 <!-- ============ CRÉDITOS, REDES Y LEGAL ============ -->
   <footer id="info" class="footer">
-    <p class="footer__credits">
-      Diseñado por
-      <a
-        href="https://www.instagram.com/at.areatotal"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="AT Arquitectos en Instagram"
-        style="text-decoration: none; color: inherit;"
-      ><strong>AT arquitectos</strong></a>
-    </p>
-
     <div class="footer__links">
       <a
         class="btn btn--at"
@@ -295,6 +300,7 @@
 <script src="js/maquillaje.js"></script>
 <script src="js/malla-datos.js"></script>
 <script src="js/malla.js"></script>
+<script src="js/diseno.js"></script>
 <script src="js/catrina.js"></script>
 
 <!-- 7. Funciones de Compartir (WhatsApp, X, etc.) -->

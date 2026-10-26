@@ -15,10 +15,10 @@
 /* ============ 01. ADAPTACIÓN UI SEGÚN EL DISPOSITIVO ============ */
 // Se envuelve en una función autoejecutable para que se aplique de inmediato al leer el script,
 // evitando el problema de que DOMContentLoaded ya haya ocurrido al estar el script al final del body.
+// Detección estricta de dispositivo móvil (por User Agent y ancho de pantalla)
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
 (function() {
-  // Detección estricta de dispositivo móvil (por User Agent y ancho de pantalla)
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-  
   const shareBtn = document.getElementById('modalShareBtn');
   const waBtn = document.getElementById('modalWhatsappBtn');
   const xBtn = document.getElementById('modalXBtn');
@@ -76,8 +76,10 @@ document.getElementById('modalShareBtn')?.addEventListener('click', async () => 
     // Abre el menú nativo del celular con el archivo adjunto y el texto listo para elegir app (WhatsApp, IG, etc.)
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({ files: [file], text });
+    } else if (navigator.share) {
+      await navigator.share({ text: [CONFIG.SHARE_TEXT, hashtags].filter(Boolean).join(' '), url: CONFIG.SITE_URL });
     } else {
-      await navigator.share({ text, url: window.location.href });
+      await shareApp();   // sin menú nativo: copia el mensaje con el enlace
     }
   } catch (e) {
     // Si el usuario cancela el menú de compartir, se ignora el error de forma silenciosa (AbortError)
@@ -98,14 +100,17 @@ async function shareMedia(target) {
   const text = [CONFIG.SHARE_TEXT, hashtags, CONFIG.SITE_URL].filter(Boolean).join(' ');
 
   // Intento de respaldo por si se invoca la función directamente en móvil
-  try {
-    const file = await prepareShareFile();
-    if (file && navigator.canShare && navigator.canShare({ files: [file] })) { 
-      await navigator.share({ files: [file], text }); 
-      return; 
+  // (en escritorio se omite: esperar aquí haría que el navegador bloquee la ventana de WhatsApp/X)
+  if (isMobile) {
+    try {
+      const file = await prepareShareFile();
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) { 
+        await navigator.share({ files: [file], text }); 
+        return; 
+      }
+    } catch (e) { 
+      if (e.name === 'AbortError') return; 
     }
-  } catch (e) { 
-    if (e.name === 'AbortError') return; 
   }
 
   // En PC: Como no se pueden adjuntar archivos directo por enlace web, 
@@ -120,4 +125,50 @@ async function shareMedia(target) {
   if (typeof setNote === 'function') {
     setNote(`Archivo guardado: adjúntalo en ${target === 'x' ? 'X' : 'WhatsApp'}`);
   }
+}
+
+
+// ============ COMPARTIR LA APLICACIÓN (clic en «CatrinART» o en el botón de compartir de la cabecera) ============
+/** Copia un texto al portapapeles. Devuelve una promesa con true/false (con respaldo para navegadores antiguos). */
+function copyToClipboard(text) {
+  const respaldo = () => {
+    try {
+      const t = document.createElement('textarea');
+      t.value = text; t.setAttribute('readonly', '');
+      t.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+      document.body.appendChild(t); t.select(); t.setSelectionRange(0, 99999);
+      const ok = document.execCommand('copy');
+      t.remove();
+      return ok;
+    } catch (e) { return false; }
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text).then(() => true, () => respaldo());
+  }
+  return Promise.resolve(respaldo());
+}
+
+/**
+ * Copia el mensaje amistoso con el enlace de la app y abre el menú para compartirla en redes sociales.
+ * El copiado se lanza primero y SIN esperar, para no perder el permiso del gesto del usuario antes de abrir el menú.
+ */
+async function shareApp() {
+  const url = CONFIG.SITE_URL || appUrl();
+  const hashtags = CONFIG.HASHTAGS.map(h => '#' + h).join(' ');
+  const completo = `${CONFIG.APP_SHARE_TEXT}\n\n${url}\n\n${hashtags}`;
+  const copiado = copyToClipboard(completo);
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: CONFIG.APP_SHARE_TITLE, text: `${CONFIG.APP_SHARE_TEXT}\n\n${hashtags}`, url });
+    } catch (e) {
+      if (e.name !== 'AbortError') console.log('Error al compartir:', e);
+    }
+    if (await copiado) setStatus('¡Enlace copiado! También puedes pegarlo donde quieras 💀', 3500);
+    return;
+  }
+
+  // Sin menú nativo (p. ej. PC): queda copiado el mensaje con el enlace, listo para pegar
+  if (await copiado) setStatus('¡Mensaje y enlace copiados! Pégalos en tus redes 💀', 3500);
+  else window.prompt('Copia este enlace y compártelo:', url);
 }

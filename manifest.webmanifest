@@ -1,0 +1,16 @@
+{
+  "name": "CatrinART",
+  "short_name": "CatrinART",
+  "description": "Crea tu propia Catrina en realidad aumentada. Centro Cultural Teopanzolco.",
+  "lang": "es-MX",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#040c2c",
+  "theme_color": "#040c2c",
+  "icons": [
+    { "src": "img/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "img/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

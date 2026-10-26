@@ -27,5 +27,16 @@ function render() {
   detectFaces();                                         // 2) puntos de la cara
   const W = canvas.width, H = canvas.height;
   const conMalla = dibujarMalla(ctx, face.faces, W, H);                                    // 3) textura SVG sobre la malla (si está lista)
-  face.faces.forEach(pts => dibujarMaquillaje(ctx, pts, W, H, conMalla ? CONFIG.ADORNOS_SOBRE_CALAVERA : null));   // 4) adornos sobre la calavera (todo el dibujo si no hay malla)
+  face.faces.forEach(pts => {
+    if (conMalla) {
+      // 4) Con malla: adornos de código sobre la calavera + flores del diseño (si no cargaron, las flores de código)
+      const capas = diseno.flores ? CONFIG.ADORNOS_SOBRE_CALAVERA.filter(n => n !== 'corona' && n !== 'mejillas') : CONFIG.ADORNOS_SOBRE_CALAVERA;
+      dibujarMaquillaje(ctx, pts, W, H, capas);
+      if (diseno.flores) dibujarDiseno(ctx, pts, W, H, 'flores');
+    } else if (diseno.completo) {
+      dibujarDiseno(ctx, pts, W, H, 'completo');           // 4b) Sin malla: diseño completo (calavera + flores)
+    } else {
+      dibujarMaquillaje(ctx, pts, W, H, null);             // 4c) Último respaldo: todo dibujado con código
+    }
+  });
 }

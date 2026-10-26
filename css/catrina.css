@@ -2,3 +2,17 @@
 :root { --amber: #ff8a00; --bg: #120a14; --card: #1d1222; --line: #3a2342; }
 .logo-emoji { display: inline-block; font-size: 72px; line-height: 1; }
 .brand .logo-emoji { font-size: 28px; }
+
+/* Nombre CatrinART en la cabecera: botón que copia y comparte el enlace de la app */
+.brand__title {
+  font: inherit; color: inherit; letter-spacing: inherit; line-height: inherit; text-align: left;
+  background: none; border: 0; cursor: pointer;
+  padding: 6px 4px; margin: -6px -4px;          /* área táctil más grande sin mover el diseño */
+  -webkit-tap-highlight-color: transparent;
+  transition: color .15s, transform .1s;
+}
+.brand__title:hover, .brand__title:focus-visible { color: var(--amber); outline: none; }
+.brand__title:active { transform: scale(.96); }
+
+/* Logo del aviso para navegadores internos */
+.gate__logo { width: 72px; height: 72px; border-radius: 14px; }
