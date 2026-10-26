@@ -1,5 +1,5 @@
 /* ==================================================
-   CATRINA AR
+   CatrinART
    MÓDULO: DETECCIÓN DE ROSTROS (MEDIAPIPE FACE LANDMARKER)
    ==================================================
    Detecta hasta CONFIG.MAX_FACES rostros y entrega 468 puntos por rostro (x, y entre 0 y 1).

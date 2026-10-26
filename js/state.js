@@ -1,5 +1,5 @@
 /* ==================================================
-   CATRINA AR
+   CatrinART
    MÓDULO: ESTADO Y UTILIDADES COMPARTIDAS (STATE)
    ==================================================
 

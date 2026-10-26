@@ -1,14 +1,14 @@
 /* ==================================================
-   CATRINA AR
+   CatrinART
    MÓDULO: MALLA FACIAL CON TEXTURA SVG (WebGL)
    ==================================================
    Estira assets/catrina-textura.svg sobre los triángulos de la cara (datos en malla-datos.js).
-   Las zonas transparentes del SVG dejan ver la cara real, y el interior de ojos y boca no se dibuja,
-   así que las facciones se conservan. Si algo falla (sin WebGL, SVG ausente), quedan solo los dibujos
+   Las zonas transparentes del SVG dejan ver la cara real. Los ojos y la boca son grupos de triángulos aparte:
+   CONFIG.MALLA_CUBRIR_OJOS y MALLA_CUBRIR_BOCA deciden si la textura también los cubre. Si algo falla (sin WebGL, SVG ausente), quedan solo los dibujos
    de maquillaje.js y la app sigue funcionando.
    ================================================== */
 
-const malla = { listo: false, gl: null, cv: null, pos: new Float32Array(468 * 2), bufPos: null, n: MALLA.tri.length };
+const malla = { listo: false, gl: null, cv: null, pos: new Float32Array(468 * 2), bufPos: null, };
 
 async function initMalla() {
   try {
@@ -70,7 +70,9 @@ function dibujarMalla(c, rostros, W, H) {
     for (let i = 0; i < 468; i++) { pos[2 * i] = pts[i].x * 2 - 1; pos[2 * i + 1] = 1 - pts[i].y * 2; }
     gl.bindBuffer(gl.ARRAY_BUFFER, malla.bufPos);
     gl.bufferSubData(gl.ARRAY_BUFFER, 0, pos);
-    gl.drawElements(gl.TRIANGLES, malla.n, gl.UNSIGNED_SHORT, 0);
+    const G = MALLA.grupos, cuerpo = G.base + (CONFIG.MALLA_CUBRIR_OJOS ? G.ojos : 0);
+    gl.drawElements(gl.TRIANGLES, cuerpo * 3, gl.UNSIGNED_SHORT, 0);                         // cara (+ ojos si se cubren)
+    if (CONFIG.MALLA_CUBRIR_BOCA) gl.drawElements(gl.TRIANGLES, G.boca * 3, gl.UNSIGNED_SHORT, (G.base + G.ojos) * 6);   // interior de la boca
   }
   c.drawImage(cv, 0, 0);
   return true;

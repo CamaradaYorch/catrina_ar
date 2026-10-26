@@ -1,5 +1,5 @@
 /* ==================================================
-   CATRINA AR
+   CatrinART
    MÓDULO: COMPARTIR Y ADAPTACIÓN DE DISPOSITIVOS
    ==================================================
 

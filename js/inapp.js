@@ -1,5 +1,5 @@
 /* ==================================================
-   CATRINA AR
+   CatrinART
    MÓDULO: AVISO PARA NAVEGADORES INTERNOS (inapp)
    ==================================================
 
@@ -47,7 +47,7 @@ function showInAppGate() {
     title = 'Falta una conexión segura';
     text = 'La cámara solo funciona en páginas seguras (https://) o en localhost. Abre la dirección con HTTPS.';
   } else if (inApp) {
-    text = 'Estás en el navegador de otra app, que puede bloquear la cámara y no dejar guardar tus archivos. Ábrelo en tu navegador para usar CATRINA AR completo.';
+    text = 'Estás en el navegador de otra app, que puede bloquear la cámara y no dejar guardar tus archivos. Ábrelo en tu navegador para usar CatrinART completo.';
     if (isAndroid) {
       $('gateOpen').href = androidIntentUrl();
       $('gateOpen').classList.remove('hidden');

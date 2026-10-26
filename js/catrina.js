@@ -1,5 +1,5 @@
 /* ==================================================
-   CATRINA AR
+   CatrinART
    MÓDULO: BUCLE DE DIBUJO (cámara -> rostros -> maquillaje)
    ================================================== */
 
@@ -27,5 +27,5 @@ function render() {
   detectFaces();                                         // 2) puntos de la cara
   const W = canvas.width, H = canvas.height;
   const conMalla = dibujarMalla(ctx, face.faces, W, H);                                    // 3) textura SVG sobre la malla (si está lista)
-  face.faces.forEach(pts => dibujarMaquillaje(ctx, pts, W, H, conMalla));                  // 4) corona (y el resto si no hay malla)
+  face.faces.forEach(pts => dibujarMaquillaje(ctx, pts, W, H, conMalla ? CONFIG.ADORNOS_SOBRE_CALAVERA : null));   // 4) adornos sobre la calavera (todo el dibujo si no hay malla)
 }

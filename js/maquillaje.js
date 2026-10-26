@@ -1,5 +1,5 @@
 /* ==================================================
-   CATRINA AR
+   CatrinART
    MÓDULO: MAQUILLAJE DE CATRINA (único diseño)
    ==================================================
    Dibujo vectorial original, trazado con código sobre los puntos de la cara. Motivos tradicionales del
@@ -30,7 +30,7 @@ function flor(c, x, y, r, tonos) {
 }
 
 /** Dibuja el maquillaje sobre un rostro. pts = 478 puntos normalizados; W, H = tamaño del canvas. */
-function dibujarMaquillaje(c, pts, W, H, soloCorona) {   // soloCorona: la malla con textura ya dibujó el resto
+function dibujarMaquillaje(c, pts, W, H, capas) {   // capas: lista de bloques a dibujar; null = todos (respaldo sin malla)
   const P = k => ({ x: pts[k].x * W, y: pts[k].y * H });
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const faceW = dist(P(234), P(454)), faceH = dist(P(10), P(152));
@@ -41,11 +41,12 @@ function dibujarMaquillaje(c, pts, W, H, soloCorona) {   // soloCorona: la malla
   const camino = ids => { c.beginPath(); ids.forEach((k, i) => { const p = P(k); i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y); }); c.closePath(); };
   const punto = (p, r, relleno) => { c.beginPath(); c.arc(p.x, p.y, r, 0, TAU); relleno ? c.fill() : c.stroke(); };
 
+  const ver = n => !capas || capas.includes(n);
   c.save();
   c.lineJoin = c.lineCap = 'round';
 
-  if (!soloCorona) {
 
+  if (ver('base')) {
   // 1) Base blanca con sombra azulada en la mandíbula
   camino(OVALO);
   c.fillStyle = c.strokeStyle = COLOR.base; c.lineWidth = faceW * 0.03; c.fill(); c.stroke();
@@ -55,6 +56,9 @@ function dibujarMaquillaje(c, pts, W, H, soloCorona) {   // soloCorona: la malla
     c.fillStyle = g; punto(p, faceW * 0.3, true);
   });
 
+  }
+
+  if (ver('frente')) {
   // 2) Frente: rombo central, línea con círculo, volutas y puntos
   const f = P(9), d = faceW * 0.045;
   c.strokeStyle = COLOR.tinta; c.lineWidth = trazo;
@@ -71,6 +75,9 @@ function dibujarMaquillaje(c, pts, W, H, soloCorona) {   // soloCorona: la malla
   c.closePath(); c.fillStyle = COLOR.ambar; c.fill(); c.stroke();
   c.fillStyle = COLOR.rojo; punto(f, d * 0.22, true);
 
+  }
+
+  if (ver('cuencas')) {
   // 3) Cuencas: marco negro con borde de cuentas blancas; el ojo real queda a la vista
   [[OJO_IZQ, 33, 133], [OJO_DER, 263, 362]].forEach(([ojo, o, i]) => {
     const a = P(o), b = P(i), e = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }, ew = dist(a, b);
@@ -89,6 +96,9 @@ function dibujarMaquillaje(c, pts, W, H, soloCorona) {   // soloCorona: la malla
     for (let n = 0; n < 18; n++) { const t = n * TAU / 18; punto(at(e, Math.cos(t) * rx * 0.93, Math.sin(t) * ry * 0.93), ew * 0.045, true); }
   });
 
+  }
+
+  if (ver('nariz')) {
   // 4) Nariz de calavera
   const ap = P(6), nl = P(98), nr = P(327), nb = P(2);
   c.fillStyle = COLOR.tinta; c.beginPath(); c.moveTo(ap.x, ap.y);
@@ -97,6 +107,9 @@ function dibujarMaquillaje(c, pts, W, H, soloCorona) {   // soloCorona: la malla
   c.quadraticCurveTo(at(nr, faceW * 0.01, -faceH * 0.04).x, at(nr, faceW * 0.01, -faceH * 0.04).y, ap.x, ap.y);
   c.fill();
 
+  }
+
+  if (ver('boca')) {
   // 5) Boca: línea, costuras arriba y abajo y puntadas hacia las mejillas
   const m1 = P(61), m2 = P(291), mc = { x: (P(13).x + P(14).x) / 2, y: (P(13).y + P(14).y) / 2 };
   const ctl = { x: 2 * mc.x - (m1.x + m2.x) / 2, y: 2 * mc.y - (m1.y + m2.y) / 2 };
@@ -118,6 +131,9 @@ function dibujarMaquillaje(c, pts, W, H, soloCorona) {   // soloCorona: la malla
     }
   });
 
+  }
+
+  if (ver('barbilla')) {
   // 6) Adorno en la barbilla: flor negra con centro blanco
   const ch = at(P(152), 0, -faceH * 0.075);
   c.fillStyle = COLOR.tinta;
@@ -126,6 +142,12 @@ function dibujarMaquillaje(c, pts, W, H, soloCorona) {   // soloCorona: la malla
 
   }
 
+  // 6b) Flores en las mejillas
+  if (ver('mejillas')) {
+    [50, 280].forEach(k => { const p = P(k); flor(c, p.x, p.y, faceW * 0.06, [COLOR.vino, COLOR.rojo, COLOR.naranja]); });
+  }
+
+  if (ver('corona')) {
   // 7) Corona: hojas y flores en arco sobre la frente
   const cen = at(P(10), 0, faceH * 0.28), rxc = faceW * 0.66, ryc = faceH * 0.62, N = 9;
   const pos = i => { const t = Math.PI * (1.04 + 0.92 * i / (N - 1)); return { p: at(cen, Math.cos(t) * rxc, Math.sin(t) * ryc), t }; };
@@ -138,6 +160,8 @@ function dibujarMaquillaje(c, pts, W, H, soloCorona) {   // soloCorona: la malla
   for (let i = 0; i < N; i++) {
     const { p } = pos(i), grande = 1 - Math.abs(i - (N - 1) / 2) / N;
     flor(c, p.x, p.y, faceW * (0.1 + 0.07 * grande), tonos[i % 3]);
+  }
+
   }
 
   c.restore();

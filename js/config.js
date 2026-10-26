@@ -1,5 +1,5 @@
 /* ==================================================
-   CATRINA AR
+   CatrinART
    MÓDULO: CONFIGURACIÓN GLOBAL (CONFIG)
    ==================================================
 
@@ -24,15 +24,18 @@ const CONFIG = {
   MEDIAPIPE_WASM: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm',
   TEXTURA_SVG: 'assets/catrina-textura.svg',   // Diseño del maquillaje sobre la malla (ver README)
   TEXTURA_PX: 1024,            // Resolución a la que se rasteriza el SVG (512 en celulares muy lentos)
+  MALLA_CUBRIR_OJOS: true,     // true: la textura cubre también los ojos (la calavera no deja ver los ojos reales)
+  MALLA_CUBRIR_BOCA: false,    // false: al abrir la boca se ve la boca real; true: la textura la cubre también
+  ADORNOS_SOBRE_CALAVERA: ['frente', 'mejillas', 'barbilla', 'corona'],   // Capas de maquillaje sobre la textura; también: 'cuencas', 'nariz', 'boca'
   MAX_CANVAS_SIDE: 1280,       // Resolución máxima del lado más largo para la foto o video final (en píxeles)
-  FILE_PREFIX: 'catrina-ar',     // Prefijo asignado en el nombre de los archivos multimedia descargados
+  FILE_PREFIX: 'catrinart',     // Prefijo asignado en el nombre de los archivos multimedia descargados
   REAR_ZOOM: 1,                // Zoom de la cámara trasera (1 = sin zoom; 0.5 = más abierto, si el dispositivo lo permite)
 
   /* ============ 02. CONFIGURACIÓN DE MENSAJES, HASHTAGS Y ENLACES SOCIALES ============ */
   // Texto predeterminado para compartir, compatible con saltos de línea (\n) y negritas (*texto*)
-  SHARE_TEXT: '¡Mi CatrinART',
+  SHARE_TEXT: '¡Mi CatrinART! 💀🌼',
   
-  HASHTAGS: ['CatrinaAR', 'DiaDeMuertos'], // Etiquetas (hashtags) asociadas sin incluir el símbolo '#'
+  HASHTAGS: ['CatrinART', 'DiaDeMuertos'], // Etiquetas (hashtags) asociadas sin incluir el símbolo '#'
   
   SITE_URL: '',                                  // URL pública de despliegue (se incluye automáticamente al compartir enlaces)
   

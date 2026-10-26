@@ -1,5 +1,5 @@
 /* ==================================================
-   CATRINA AR
+   CatrinART
    MÓDULO: CAPTURA DE FOTOS, VIDEOS Y DESCARGAS (CAPTURE)
    ==================================================
 
@@ -39,7 +39,7 @@ function setMedia(media) {
  */
 function takePhoto() {
   const url = canvas.toDataURL('image/png');
-  setMedia({ type: 'image', url, ext: 'png', mime: 'image/png', title: 'Mi Catrina AR' });
+  setMedia({ type: 'image', url, ext: 'png', mime: 'image/png', title: 'Mi CatrinART' });
   openModal();
 }
 

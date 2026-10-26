@@ -1,4 +1,4 @@
-# CATRINA AR
+# CatrinART
 
 Filtro web de realidad aumentada: dibuja sobre tu rostro un maquillaje de Catrina inspirado en el Día de Muertos. Toma fotos, graba video de 10 segundos y comparte por Redes sociales con #CatrinaAR y #DiaDeMuertos. No guarda datos de los usuarios.
 

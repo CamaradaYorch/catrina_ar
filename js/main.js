@@ -1,5 +1,5 @@
 /* ==================================================
-   CATRINA AR
+   CatrinART
    MÓDULO: ARRANQUE Y CONTROLADOR PRINCIPAL (MAIN)
    ==================================================
 
@@ -48,7 +48,7 @@ $('btnFlipCamera').addEventListener('click', flipCamera);
 $('btnShare')?.addEventListener('click', async () => {
   // Estructura de datos que se enviará al sistema operativo
   const shareData = {
-    title: 'Catrina AR',
+    title: 'CatrinART',
     text: '¡Mira esta experiencia interactiva de realidad aumentada!',
     url: window.location.href
   };
