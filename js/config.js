@@ -30,7 +30,7 @@ const CONFIG = {
 
   /* ============ 02. CONFIGURACIÓN DE MENSAJES, HASHTAGS Y ENLACES SOCIALES ============ */
   // Texto predeterminado para compartir, compatible con saltos de línea (\n) y negritas (*texto*)
-  SHARE_TEXT: '¡Mi Catrina AR! 💀🌼',
+  SHARE_TEXT: '¡Mi CatrinART',
   
   HASHTAGS: ['CatrinaAR', 'DiaDeMuertos'], // Etiquetas (hashtags) asociadas sin incluir el símbolo '#'
   

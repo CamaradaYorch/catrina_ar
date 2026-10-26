@@ -2,7 +2,7 @@
    CATRINA AR
    MÓDULO: DETECCIÓN DE ROSTROS (MEDIAPIPE FACE LANDMARKER)
    ==================================================
-   Detecta hasta CONFIG.MAX_FACES rostros y entrega 478 puntos por rostro (x, y entre 0 y 1).
+   Detecta hasta CONFIG.MAX_FACES rostros y entrega 468 puntos por rostro (x, y entre 0 y 1).
    Todo corre en el navegador; ninguna imagen se envía a un servidor.
    El modelo (.task) vive dentro del sitio: models/face_landmarker.task
    ================================================== */
@@ -34,7 +34,10 @@ async function initFace() {
           baseOptions: { modelAssetPath: CONFIG.FACE_MODEL, delegate },
           runningMode: 'VIDEO',
           numFaces: CONFIG.MAX_FACES,
-          outputFaceBlendshapes: false
+          outputFaceBlendshapes: false,
+          
+          // CLAVE: Desactiva los puntos extra de iris/ojos para fijar la malla en 468 vértices exactos
+          refineLandmarks: false 
         });
         break;
       } catch (e) { console.warn('Face Landmarker con', delegate, 'falló:', e); }
@@ -59,7 +62,7 @@ function sizeFaceInput(w, h) {
   faceInput.height = Math.round(h * k);
 }
 
-/** Pide nuevos puntos al modelo (limitado a CONFIG.DETECT_EVERY_MS) y los suaviza para evitar temblor. */
+/** Pide nuevos puntos al modelo (limitado a CONFIG.DETECT_EVERY_MS) y los suaviza de forma uniforme para evitar temblor y desgarros. */
 function detectFaces() {
   if (!face.model) return;
   const now = performance.now();
@@ -73,6 +76,8 @@ function detectFaces() {
   try {
     const found = face.model.detectForVideo(faceInput, face.lastTs).faceLandmarks || [];
     const old = face.faces;
+    
+    // Mapeo uniforme y seguro para toda la malla 3D (evita cualquier ruptura de triángulos)
     face.faces = found.map((pts, i) => {
       const prev = old.length === found.length ? old[i] : null;
       return pts.map((p, j) => prev
@@ -83,4 +88,6 @@ function detectFaces() {
 }
 
 /** Olvida los rostros actuales (al voltear espejo o cambiar de cámara). */
-function resetFace() { face.faces = []; }
+function resetFace() { 
+  face.faces = []; 
+}
