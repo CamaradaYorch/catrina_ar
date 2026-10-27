@@ -86,6 +86,7 @@ async function startRecording() {
   
   recorder.onstop = () => {
     if (mic) mic.getTracks().forEach(t => t.stop());
+    if (typeof playPixelSound === 'function') playPixelSound('stop');
     const url = URL.createObjectURL(new Blob(chunks, { type }));
     const ext = type.includes('mp4') ? 'mp4' : 'webm';
     

@@ -33,11 +33,11 @@ const CONFIG = {
   INTRO_LOGO_MS: 2500,         // Duración del logo del Centro Cultural al encender la app (aparece, se sostiene y se desvanece)
   MOSTRAR_PROTOTIPO: true,     // true: marca de agua roja «PROTOTIPO» sobre toda la interfaz. Ponlo en false al aprobar el proyecto
   LOGO_TEO: 'assets/logo-teo.png',   // Logo del Centro Cultural (blanco, fondo transparente)
-  MARCA_AGUA: true,            // true: el logo se imprime en las fotos y videos (centro muy tenue + abajo)
-  MARCA_CENTRO_ALFA: 0.12,     // Opacidad del logo central (0 a 1)
-  MARCA_CENTRO_ANCHO: 0.42,    // Ancho del logo central como fracción del ancho de la imagen
-  MARCA_ABAJO_ALFA: 0.7,       // Opacidad del logo inferior
-  MARCA_ABAJO_ANCHO: 0.34,     // Ancho del logo inferior como fracción del ancho de la imagen
+  MARCA_AGUA: true,            // true: el logo del Centro Cultural se imprime abajo en las fotos y videos
+  MARCA_ABAJO_ALFA: 0.8,       // Opacidad del logo (0 a 1)
+  MARCA_ABAJO_ANCHO: 0.34,     // Ancho del logo como fracción del ancho de la imagen
+  SONIDOS: true,               // true: los botones y la cámara tienen sonido (generado por código, sin archivos)
+  SONIDO_VOLUMEN: 0.3,         // Volumen de los sonidos (0 a 1)
   MARCA_EN_VIVO: false,        // false: el logo solo se ve en lo capturado (foto/video); true: también en la vista en vivo
   FILE_PREFIX: 'catrinart',     // Prefijo asignado en el nombre de los archivos multimedia descargados
   REAR_ZOOM: 1,                // Zoom de la cámara trasera (1 = sin zoom; 0.5 = más abierto, si el dispositivo lo permite)

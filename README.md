@@ -34,5 +34,5 @@ jsDelivr (librería y WASM de MediaPipe) y Google Fonts. El modelo va en tu prop
 
 ## Logo del Centro Cultural, marca de agua y PROTOTIPO
 - Al pulsar «Comenzar» y aceptar la cámara aparece `assets/logo-teo.png` centrado sobre negro (`CONFIG.INTRO_LOGO_MS`, 2.5 s) y se desvanece hasta la interfaz.
-- Fotos y videos llevan el logo (centro muy tenue + abajo) desde `js/marca.js`; se ajusta con `MARCA_*` en `config.js`.
+- Fotos y videos llevan el logo (solo abajo) desde `js/marca.js`; se ajusta con `MARCA_*` en `config.js`.
 - La marca roja `assets/prototipo.svg` cubre la pantalla: quítala con `MOSTRAR_PROTOTIPO: false` o borrando el bloque `#prototipoMarca` en `index.html`.

@@ -3,9 +3,9 @@
    MÓDULO: MARCA DE AGUA DEL CENTRO CULTURAL TEOPANZOLCO
    ==================================================
    Imprime el logo (assets/logo-teo.png, blanco con fondo transparente) en las fotos y videos:
-   un logo muy tenue al centro y otro más visible abajo, con una sombra suave para que se lea
+   el logo en la parte de abajo, con una sombra suave para que se lea
    sobre fondos claros u oscuros. Es parte de la imagen, así que viaja con lo que se comparte o imprime.
-   Ajustes en js/config.js: MARCA_AGUA, MARCA_CENTRO_ALFA/ANCHO, MARCA_ABAJO_ALFA/ANCHO, MARCA_EN_VIVO.
+   Ajustes en js/config.js: MARCA_AGUA, MARCA_ABAJO_ALFA/ANCHO, MARCA_EN_VIVO.
    ================================================== */
 
 const marca = { logo: null, ratio: 0.277 };   // ratio = alto / ancho del logo
@@ -29,7 +29,7 @@ async function initMarca() {
   }
 }
 
-/** Dibuja la marca de agua sobre un canvas de tamaño W x H (centro tenue + abajo). */
+/** Dibuja la marca de agua (logo abajo, centrado) sobre un canvas de tamaño W x H. */
 function dibujarMarcaAgua(c, W, H) {
   if (!CONFIG.MARCA_AGUA || !marca.logo) return;
   const base = Math.min(W, H * 1.1);            // en horizontal los logos no se agrandan de más
@@ -37,13 +37,7 @@ function dibujarMarcaAgua(c, W, H) {
   c.shadowColor = 'rgba(0,0,0,.55)';
   c.shadowBlur = base * 0.006;
 
-  // Centro: muy tenue, forma parte del diseño sin estorbar
-  let w = base * CONFIG.MARCA_CENTRO_ANCHO, h = w * marca.ratio;
-  c.globalAlpha = CONFIG.MARCA_CENTRO_ALFA;
-  c.drawImage(marca.logo, (W - w) / 2, (H - h) / 2, w, h);
-
-  // Abajo: más visible
-  w = base * CONFIG.MARCA_ABAJO_ANCHO; h = w * marca.ratio;
+  const w = base * CONFIG.MARCA_ABAJO_ANCHO, h = w * marca.ratio;
   c.globalAlpha = CONFIG.MARCA_ABAJO_ALFA;
   c.drawImage(marca.logo, (W - w) / 2, H - h - H * 0.04, w, h);
   c.restore();
