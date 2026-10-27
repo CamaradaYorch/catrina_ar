@@ -30,6 +30,15 @@ const CONFIG = {
   MALLA_CUBRIR_BOCA: false,    // false: al abrir la boca se ve la boca real; true: la textura la cubre también
   ADORNOS_SOBRE_CALAVERA: ['frente', 'mejillas', 'barbilla', 'corona'],   // Capas de maquillaje sobre la textura; también: 'cuencas', 'nariz', 'boca'
   MAX_CANVAS_SIDE: 1280,       // Resolución máxima del lado más largo para la foto o video final (en píxeles)
+  INTRO_LOGO_MS: 2500,         // Duración del logo del Centro Cultural al encender la app (aparece, se sostiene y se desvanece)
+  MOSTRAR_PROTOTIPO: true,     // true: marca de agua roja «PROTOTIPO» sobre toda la interfaz. Ponlo en false al aprobar el proyecto
+  LOGO_TEO: 'assets/logo-teo.png',   // Logo del Centro Cultural (blanco, fondo transparente)
+  MARCA_AGUA: true,            // true: el logo se imprime en las fotos y videos (centro muy tenue + abajo)
+  MARCA_CENTRO_ALFA: 0.12,     // Opacidad del logo central (0 a 1)
+  MARCA_CENTRO_ANCHO: 0.42,    // Ancho del logo central como fracción del ancho de la imagen
+  MARCA_ABAJO_ALFA: 0.7,       // Opacidad del logo inferior
+  MARCA_ABAJO_ANCHO: 0.34,     // Ancho del logo inferior como fracción del ancho de la imagen
+  MARCA_EN_VIVO: false,        // false: el logo solo se ve en lo capturado (foto/video); true: también en la vista en vivo
   FILE_PREFIX: 'catrinart',     // Prefijo asignado en el nombre de los archivos multimedia descargados
   REAR_ZOOM: 1,                // Zoom de la cámara trasera (1 = sin zoom; 0.5 = más abierto, si el dispositivo lo permite)
 

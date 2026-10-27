@@ -31,6 +31,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="img/icons/icon-192.png">
   <link rel="apple-touch-icon" href="img/icons/icon-180.png">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preload" as="image" href="assets/logo-teo.png">
 
   <!-- ============ ESTILOS Y LIBRERÍAS ============ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,6 +41,17 @@
   <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.js" crossorigin="anonymous"></script> -->
 </head>
 <body>
+
+  <!-- ============ MARCA DE AGUA «PROTOTIPO» (cubre toda la pantalla) ============
+       Para quitarla cuando el proyecto sea aprobado: pon MOSTRAR_PROTOTIPO: false en js/config.js
+       (o borra / comenta este bloque; la app funciona igual sin él). -->
+  <div id="prototipoMarca" class="prototipo" aria-hidden="true"></div>
+  <!-- ============ FIN MARCA DE AGUA ============ -->
+
+  <!-- ============ LOGO DEL CENTRO CULTURAL (aparece al encender la app, ~2.5 s) ============ -->
+  <div id="introLogo" class="intro-logo hidden" aria-hidden="true">
+    <img src="assets/logo-teo.png" alt="Centro Cultural Teopanzolco">
+  </div>
 
   <!-- ============ AVISO PARA NAVEGADORES INTERNOS (Facebook, Instagram, LinkedIn, TikTok…) ============ -->
   <div id="inAppGate" class="gate hidden" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
@@ -301,6 +313,7 @@
 <script src="js/malla-datos.js"></script>
 <script src="js/malla.js"></script>
 <script src="js/diseno.js"></script>
+<script src="js/marca.js"></script>
 <script src="js/catrina.js"></script>
 
 <!-- 7. Funciones de Compartir (WhatsApp, X, etc.) -->

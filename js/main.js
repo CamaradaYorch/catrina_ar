@@ -70,8 +70,10 @@ document.addEventListener('keydown', e => {
 //     el splash se "apaga" como una TV antigua y la app se "enciende" con el filtro ya listo.
 
 const SPLASH_READY_MS = 2000;  // = 1 ciclo de logoPulse (2 s). Cámbialo si cambias esa animación.
-const CRT_OFF_MS = 380;        // duración de crtTurnOff en el CSS
 const CRT_ON_MS = 1500;        // tiempo que dura el efecto de encendido (animación + parpadeo)
+
+// Marca de agua «PROTOTIPO»: se quita con CONFIG.MOSTRAR_PROTOTIPO = false (o borrando su bloque en index.html)
+if (!CONFIG.MOSTRAR_PROTOTIPO) $('prototipoMarca')?.remove();
 
 const splash = $('splashScreen');
 const splashStart = $('splashStart');
@@ -81,6 +83,7 @@ let appLaunched = false;
 initFace();
 initMalla();
 initDiseno();
+initMarca();
 requestAnimationFrame(render);
 
 // Mensaje de estado vacío mientras el splash esté visible
@@ -112,19 +115,36 @@ async function launchApp() {
   if (ok) hideFlipButtonIfSingleCamera();
   if (face.ready) setStatus('');
 
-  // TV antigua: el splash se apaga...
-  splash.classList.add('splash--crt-off');
-  await new Promise(r => setTimeout(r, CRT_OFF_MS));
-  splash.remove();
+  // Logo del Centro Cultural (~2.5 s) y, al desvanecerse, la interfaz se "enciende" como TV antigua
+  await mostrarLogoIntro();
+}
 
-  // ...y la app se enciende con líneas de barrido y parpadeo
+const dormir = ms => new Promise(r => setTimeout(r, ms));
+
+/** Muestra el logo del Teopanzolco centrado sobre negro: aparece, se sostiene y se desvanece hasta la interfaz. */
+async function mostrarLogoIntro() {
+  const el = $('introLogo');
+  const ms = CONFIG.INTRO_LOGO_MS || 2500;
+  const FADE_AT = 0.72;                       // el fondo negro empieza a desvanecerse (igual que en catrina.css)
+
+  if (el) {
+    el.style.setProperty('--intro-ms', ms + 'ms');
+    el.classList.remove('hidden');
+    void el.offsetWidth;                      // reinicia la animación
+    el.classList.add('is-playing');
+  }
+  splash.remove();                            // queda oculto detrás de la capa negra del logo
+  if (el) await dormir(ms * FADE_AT);
+
+  // La interfaz se enciende con líneas de barrido y parpadeo mientras el negro se desvanece
   const crt = $('crtOverlay');
   stage.classList.remove('camera-crt-reveal');
-  void stage.offsetWidth;                       // reinicia la animación
+  void stage.offsetWidth;
   stage.classList.add('camera-crt-reveal');
   crt.classList.add('is-active');
+  if (el) { await dormir(ms * (1 - FADE_AT) + 50); el.remove(); }
   setTimeout(() => {
     stage.classList.remove('camera-crt-reveal');
     crt.classList.remove('is-active');
-  }, CRT_ON_MS + 100);
+  }, CRT_ON_MS);
 }

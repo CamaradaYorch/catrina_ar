@@ -39,4 +39,5 @@ function render() {
       dibujarMaquillaje(ctx, pts, W, H, null);             // 4c) Último respaldo: todo dibujado con código
     }
   });
+  if (CONFIG.MARCA_EN_VIVO || state.isRecording) dibujarMarcaAgua(ctx, W, H);   // 5) logo del Teopanzolco (siempre dentro del video grabado)
 }

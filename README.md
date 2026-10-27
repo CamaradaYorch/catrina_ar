@@ -31,3 +31,8 @@ jsDelivr (librería y WASM de MediaPipe) y Google Fonts. El modelo va en tu prop
 ## Marca y compartir
 - Logo y favicon: `img/logo.png`, `favicon.ico`, `img/icons/` y `manifest.webmanifest` (todo generado de Catrinart.png). Imagen para redes: `assets/preview.jpg`.
 - Al tocar el nombre «CatrinART» (o el botón de compartir) se copia el mensaje con el enlace `CONFIG.SITE_URL` y se abre el menú de compartir. Texto en `CONFIG.APP_SHARE_TEXT`.
+
+## Logo del Centro Cultural, marca de agua y PROTOTIPO
+- Al pulsar «Comenzar» y aceptar la cámara aparece `assets/logo-teo.png` centrado sobre negro (`CONFIG.INTRO_LOGO_MS`, 2.5 s) y se desvanece hasta la interfaz.
+- Fotos y videos llevan el logo (centro muy tenue + abajo) desde `js/marca.js`; se ajusta con `MARCA_*` en `config.js`.
+- La marca roja `assets/prototipo.svg` cubre la pantalla: quítala con `MOSTRAR_PROTOTIPO: false` o borrando el bloque `#prototipoMarca` en `index.html`.

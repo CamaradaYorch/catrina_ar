@@ -16,3 +16,28 @@
 
 /* Logo del aviso para navegadores internos */
 .gate__logo { width: 72px; height: 72px; border-radius: 14px; }
+
+/* ============ Marca de agua «PROTOTIPO»: mosaico rojo sobre toda la pantalla; no bloquea toques ============ */
+.prototipo {
+  position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+  background: url('../assets/prototipo.svg') repeat center / clamp(260px, 38vw, 420px) auto;
+}
+
+/* ============ Logo del Centro Cultural al encender la app (negro, centrado, adaptable) ============
+   Duración total = CONFIG.INTRO_LOGO_MS (2.5 s). La capa negra se desvanece al final y deja ver la interfaz. */
+.intro-logo {
+  position: fixed; inset: 0; z-index: 150; background: #000;
+  display: flex; align-items: center; justify-content: center;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  pointer-events: all;
+}
+.intro-logo img {
+  display: block; width: min(80vw, 640px); max-height: 45vh; height: auto; object-fit: contain;
+  opacity: 0;
+}
+.intro-logo.is-playing { animation: introFondo var(--intro-ms, 2500ms) ease both; }
+.intro-logo.is-playing img { animation: introLogo var(--intro-ms, 2500ms) ease both; }
+@keyframes introLogo  { 0% { opacity: 0; transform: scale(.96); } 24% { opacity: 1; transform: scale(1); } 74% { opacity: 1; } 100% { opacity: 1; transform: scale(1.01); } }
+@keyframes introFondo { 0%, 72% { opacity: 1; } 100% { opacity: 0; } }
+@media (orientation: landscape) and (max-height: 500px) { .intro-logo img { max-height: 60vh; width: min(60vw, 560px); } }
+@media (prefers-reduced-motion: reduce) { .intro-logo img { transform: none !important; } }

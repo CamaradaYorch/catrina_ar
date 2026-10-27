@@ -38,7 +38,7 @@ function setMedia(media) {
  * la registra en el estado y abre el modal de vista previa.
  */
 function takePhoto() {
-  const url = canvas.toDataURL('image/png');
+  const url = canvasParaExportar().toDataURL('image/png');   // con marca de agua del Teopanzolco
   setMedia({ type: 'image', url, ext: 'png', mime: 'image/png', title: 'Mi CatrinART' });
   openModal();
 }
