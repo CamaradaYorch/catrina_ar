@@ -169,11 +169,11 @@ async function shareApp() {
     } catch (e) {
       if (e.name !== 'AbortError') console.log('Error al compartir:', e);
     }
-    if (await copiado) setStatus('¡Enlace copiado! También puedes pegarlo donde quieras 💀', 3500);
+    if (await copiado) setStatus('¡Enlace copiado! También puedes pegarlo donde quieras', 3500);
     return;
   }
 
   // Sin menú nativo (p. ej. PC): queda copiado el mensaje con el enlace, listo para pegar
-  if (await copiado) setStatus('¡Mensaje y enlace copiados! Pégalos en tus redes 💀', 3500);
+  if (await copiado) setStatus('¡Mensaje y enlace copiados! Pégalos en tus redes', 3500);
   else window.prompt('Copia este enlace y compártelo:', url);
 }

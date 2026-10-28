@@ -96,7 +96,7 @@ $('btnChangeDesign')?.addEventListener('click', () => {
   const personasTexto = numCaras > 1 ? `aplicado a las <b>${numCaras} personas</b> en pantalla` : `aplicado para <b>1 o hasta 3 personas</b>`;
   showDesignToast(
     `Estilo: ${current.nombre}`,
-    `${current.desc}.<br>✨ Diseño ${personasTexto}.`,
+    `${current.desc}.<br>Diseño ${personasTexto}.`,
     4000
   );
 
@@ -188,8 +188,8 @@ async function launchApp() {
   // Muestra brevemente la leyenda explicativa para que el usuario conozca el botón de cambio de estilo
   setTimeout(() => {
     showDesignToast(
-      '¡Elige tu Catrina!',
-      'Usa el botón <b>🎨</b> arriba a la derecha para cambiar entre estilos. Funciona para <b>1 o hasta 3 personas</b>.',
+      'Elige tu Catrina',
+      'Usa el botón de paleta arriba a la derecha para cambiar entre estilos. Funciona para <b>1 o hasta 3 personas</b>.',
       5500
     );
   }, 1200);

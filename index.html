@@ -179,11 +179,11 @@
     <!-- Aviso flotante interactivo sobre el cambio de diseño (aplica de 1 a 3 personas) -->
     <div id="designToast" class="design-toast hidden" role="status" aria-live="polite">
       <div class="design-toast__body">
-        <span class="design-toast__icon">🎨</span>
+        <svg class="icon design-toast__icon"><use href="#i-palette"/></svg>
         <div class="design-toast__info">
-          <p id="designToastTitle" class="design-toast__title">¡Cambia de estilo!</p>
+          <p id="designToastTitle" class="design-toast__title">Cambia de estilo</p>
           <p id="designToastText" class="design-toast__desc">
-            Toca <strong>🎨</strong> para cambiar el estilo de Catrina (aplica para <strong>1 o hasta 3 personas</strong>).
+            Toca el <strong>botón de paleta</strong> para cambiar el estilo de Catrina (aplica para <strong>1 o hasta 3 personas</strong>).
           </p>
         </div>
       </div>
@@ -242,7 +242,7 @@
     <!-- Pantalla táctil de reanudación si el navegador suspende la cámara al cambiar de app -->
     <div id="resumeOverlay" class="resume-overlay hidden" role="button" tabindex="0" aria-label="Toca para reanudar la cámara">
       <div class="resume-overlay__card">
-        <span class="resume-overlay__icon">📷</span>
+        <svg class="icon icon--lg"><use href="#i-camera"/></svg>
         <p class="resume-overlay__text">&gt; TOCA PARA REANUDAR &lt;</p>
       </div>
     </div>
@@ -281,19 +281,9 @@
       </a>
     </div>
 
-    <!-- Contador de visitas oficial colocado justo abajo del logo -->
-    <div id="visitorCounter" class="footer__counter" title="Total de visitas y experiencias CatrinART">
-      <span class="footer__counter-icon">💀</span>
-      <span class="footer__counter-label">Catrinas creadas:</span>
-      <img
-        id="visitorBadgeImg"
-        class="footer__counter-img"
-        src="https://hits.sh/catrina-ar.netlify.app.svg?label=&color=ff8a00&labelColor=1d1222"
-        alt="Contador de visitas CatrinART"
-        width="50"
-        height="20"
-        loading="lazy"
-      >
+    <!-- Contador de visitas oficial (solo dígitos de usuarios, sin texto ni emoticones) -->
+    <div id="visitorCounter" class="footer__counter" title="Usuarios">
+      <span id="visitorCountNum" class="footer__counter-num">--</span>
     </div>
 
     <nav class="footer__legal">
