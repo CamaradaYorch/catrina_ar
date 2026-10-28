@@ -39,14 +39,7 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/catrina.css">
   
-  <!-- ============ GOOGLE ANALYTICS 4 (GTAG.JS) ============ -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9DDCDDFES5"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-9DDCDDFES5', { anonymize_ip: true });
-  </script>
+  <!-- Google Analytics 4 se carga desde js/analytics.js (ID en CONFIG.GA_MEASUREMENT_ID) -->
 </head>
 <body>
 
@@ -176,18 +169,14 @@
       </div>
     </header>
 
-    <!-- Aviso flotante interactivo sobre el cambio de diseño (aplica de 1 a 3 personas) -->
+    <!-- Tarjeta que explica el botón de paleta (se señala con una flecha; se cierra sola o al tocarla) -->
     <div id="designToast" class="design-toast hidden" role="status" aria-live="polite">
-      <div class="design-toast__body">
-        <svg class="icon design-toast__icon"><use href="#i-palette"/></svg>
-        <div class="design-toast__info">
-          <p id="designToastTitle" class="design-toast__title">Cambia de estilo</p>
-          <p id="designToastText" class="design-toast__desc">
-            Toca el <strong>botón de paleta</strong> para cambiar el estilo de Catrina (aplica para <strong>1 o hasta 3 personas</strong>).
-          </p>
-        </div>
+      <svg class="icon design-toast__icon" aria-hidden="true"><use href="#i-palette"/></svg>
+      <div class="design-toast__info">
+        <p id="designToastTitle" class="design-toast__title">Cambia tu Catrina</p>
+        <p id="designToastText" class="design-toast__desc">Toca la paleta · 1 a 3 personas</p>
       </div>
-      <button id="btnDismissToast" class="design-toast__close" type="button" aria-label="Entendido">&times;</button>
+      <span class="design-toast__bar" aria-hidden="true"></span>
     </div>
 
     <!-- Indicador de grabación de video -->
@@ -281,9 +270,9 @@
       </a>
     </div>
 
-    <!-- Contador de visitas oficial (solo dígitos de usuarios, sin texto ni emoticones) -->
-    <div id="visitorCounter" class="footer__counter" title="Usuarios">
-      <span id="visitorCountNum" class="footer__counter-num">--</span>
+    <!-- Contador: solo el número de personas que ya crearon su Catrina (aparece al aprobar el proyecto) -->
+    <div id="visitorCounter" class="footer__counter hidden" aria-label="Usuarios">
+      <span id="visitorCountNum" class="footer__counter-num">0</span>
     </div>
 
     <nav class="footer__legal">

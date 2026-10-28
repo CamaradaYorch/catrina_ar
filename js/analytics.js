@@ -60,15 +60,15 @@ const Analytics = {
     design_name: designName,
     faces_detected: faceCount || 0
   }),
-  takePhoto: (faceCount) => trackEvent('take_photo', {
+  takePhoto: (faceCount) => { Analytics.countCreator('foto'); trackEvent('take_photo', {
     faces_detected: faceCount || 0,
     facing: (typeof state !== 'undefined' && state.facing) || 'user'
-  }),
-  recordVideo: (durationSec, faceCount) => trackEvent('record_video', {
+  }); },
+  recordVideo: (durationSec, faceCount) => { Analytics.countCreator('video'); trackEvent('record_video', {
     duration_seconds: durationSec,
     faces_detected: faceCount || 0,
     facing: (typeof state !== 'undefined' && state.facing) || 'user'
-  }),
+  }); },
   flipCamera: (facing) => trackEvent('flip_camera', { facing_mode: facing }),
   toggleMirror: (mirrored) => trackEvent('toggle_mirror', { is_mirrored: mirrored }),
   shareApp: (channel) => trackEvent('share_app', { method: channel || 'generic' }),
@@ -76,43 +76,40 @@ const Analytics = {
   downloadMedia: (mediaType) => trackEvent('download_media', { media_type: mediaType }),
 
   /**
-   * Contador de visitas sin base de datos ni servidor propio.
-   * REGLA: Solo se activa y empieza a contar en 0 cuando se aprueba la app (CONFIG.MOSTRAR_PROTOTIPO = false).
-   * Mientras sea prototipo, NO se incrementa para que las pruebas no inflen el número.
+   * CONTADOR (solo el número). Cuenta UNA vez por visita a cada persona que crea contenido (toma una foto o graba un video).
+   * - Se manda a Google Analytics como el evento «visita_creador» (siempre, con modo prototipo/produccion para poder filtrar).
+   * - El número visible del pie de página se suma con un servicio de conteo gratuito (CounterAPI) y solo cuando
+   *   CONFIG.MOSTRAR_PROTOTIPO = false, para que las pruebas no inflen la cifra.
    */
-  initVisitorCounter: async () => {
-    const counterEl = document.getElementById('visitorCounter');
-    const countNum = document.getElementById('visitorCountNum');
-    if (!counterEl || !countNum) return;
+  countCreator: async (tipo) => {
+    const FLAG = 'catrinart_contado';
+    try { if (sessionStorage.getItem(FLAG)) return; sessionStorage.setItem(FLAG, '1'); } catch (e) { /* sin sessionStorage: puede contar de más, no falla */ }
 
-    // Si aún está en modo prototipo (pruebas de desarrollo), no se activa el contador oficial
-    if (typeof CONFIG !== 'undefined' && CONFIG.MOSTRAR_PROTOTIPO) {
-      counterEl.classList.add('hidden');
-      return;
-    }
+    const enPrueba = !!(typeof CONFIG !== 'undefined' && CONFIG.MOSTRAR_PROTOTIPO);
+    trackEvent('visita_creador', { tipo, modo: enPrueba ? 'prototipo' : 'produccion' });
+    if (enPrueba) return;
+    await Analytics.contador('up');
+  },
 
-    // Modo producción (aprobado): mostramos el contador e incrementamos la visita
-    counterEl.classList.remove('hidden');
-
+  /** Muestra el número actual del contador ('get') o suma uno y lo muestra ('up'). */
+  contador: async (accion) => {
+    const box = document.getElementById('visitorCounter');
+    const num = document.getElementById('visitorCountNum');
+    if (!box || !num) return;
     try {
-      // API pública gratuita de conteo sin servidor (CounterAPI)
-      const res = await fetch('https://api.counterapi.dev/v1/catrinart_cct_oficial/visitas/up');
-      if (res.ok) {
-        const data = await res.json();
-        if (data && typeof data.count !== 'undefined') {
-          countNum.textContent = Number(data.count).toLocaleString('es-MX');
-        }
-      }
+      const res = await fetch('https://api.counterapi.dev/v1/catrinart_cct_oficial/usuarios' + (accion === 'up' ? '/up' : ''));
+      if (!res.ok) throw new Error('contador ' + res.status);
+      const data = await res.json();
+      num.textContent = Number(data.count || 0).toLocaleString('es-MX');
+      box.classList.remove('hidden');
     } catch (e) {
-      // Si el usuario no tiene conexión en ese instante o la red bloquea la petición
-      counterEl.classList.add('hidden');
+      // Sin red o servicio no disponible: el contador simplemente no se muestra
+      if (accion !== 'up') box.classList.add('hidden');
     }
   }
 };
 
-// Intenta inicializar el contador al cargar la página
+// Al cargar la página solo se MUESTRA el número actual (no suma). Se oculta mientras el proyecto sea prototipo.
 document.addEventListener('DOMContentLoaded', () => {
-  if (typeof Analytics !== 'undefined') {
-    Analytics.initVisitorCounter();
-  }
+  if (typeof CONFIG !== 'undefined' && !CONFIG.MOSTRAR_PROTOTIPO) Analytics.contador('get');
 });

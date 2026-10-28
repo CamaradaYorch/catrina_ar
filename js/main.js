@@ -55,24 +55,33 @@ $('btnFlipCamera').addEventListener('click', () => {
 /* ============ CAMBIO DE ESTILO DE CATRINA (1 A 3 PERSONAS) ============ */
 let toastTimer = null;
 
+/** Muestra la tarjeta del botón de paleta: título corto + una línea, con la flecha apuntando al botón. */
 function showDesignToast(title, desc, durationMs = 4500) {
   const toast = $('designToast');
   if (!toast) return;
   $('designToastTitle').textContent = title;
   $('designToastText').innerHTML = desc;
+  toast.style.setProperty('--toast-ms', durationMs + 'ms');
   toast.classList.remove('hidden');
-  clearTimeout(toastTimer);
-  if (durationMs > 0) {
-    toastTimer = setTimeout(() => {
-      toast.classList.add('hidden');
-    }, durationMs);
+  // Reinicia la barra de tiempo y la animación de entrada
+  toast.style.animation = 'none'; void toast.offsetWidth; toast.style.animation = '';
+  const bar = toast.querySelector('.design-toast__bar');
+  if (bar) { bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = ''; }
+  // La flecha se centra bajo el botón de paleta, sin importar el tamaño de pantalla
+  const btn = $('btnChangeDesign');
+  if (btn) {
+    const b = btn.getBoundingClientRect(), t = toast.getBoundingClientRect();
+    toast.style.setProperty('--ax', Math.max(14, Math.min(t.width - 14, t.right - (b.left + b.width / 2))) + 'px');
   }
+  clearTimeout(toastTimer);
+  if (durationMs > 0) toastTimer = setTimeout(hideDesignToast, durationMs);
 }
 
-$('btnDismissToast')?.addEventListener('click', () => {
+function hideDesignToast() {
   $('designToast')?.classList.add('hidden');
   clearTimeout(toastTimer);
-});
+}
+$('designToast')?.addEventListener('click', hideDesignToast);   // un toque en la tarjeta la cierra
 
 $('btnChangeDesign')?.addEventListener('click', () => {
   const disenos = CONFIG.DISENOS || [];
@@ -91,13 +100,12 @@ $('btnChangeDesign')?.addEventListener('click', () => {
   // Efecto sonoro de cambio de estilo
   if (typeof playPixelSound === 'function') playPixelSound('click');
 
-  // Muestra leyenda informativa al usuario confirmando que aplica a 1 o hasta 3 personas
+  // Confirma el estilo elegido en una sola línea
   const numCaras = (face.faces && face.faces.length) || 0;
-  const personasTexto = numCaras > 1 ? `aplicado a las <b>${numCaras} personas</b> en pantalla` : `aplicado para <b>1 o hasta 3 personas</b>`;
   showDesignToast(
-    `Estilo: ${current.nombre}`,
-    `${current.desc}.<br>Diseño ${personasTexto}.`,
-    4000
+    current.nombre,
+    numCaras > 1 ? `Aplicado a las <b>${numCaras} personas</b>` : 'Se aplica a <b>1 a 3 personas</b>',
+    3500
   );
 
   // Registro en Google Analytics
@@ -185,13 +193,9 @@ async function launchApp() {
   // Logo del Centro Cultural (~2.5 s) y, al desvanecerse, la interfaz se "enciende" como TV antigua
   await mostrarLogoIntro();
 
-  // Muestra brevemente la leyenda explicativa para que el usuario conozca el botón de cambio de estilo
+  // Muestra brevemente la tarjeta que explica el botón de cambio de estilo
   setTimeout(() => {
-    showDesignToast(
-      'Elige tu Catrina',
-      'Usa el botón de paleta arriba a la derecha para cambiar entre estilos. Funciona para <b>1 o hasta 3 personas</b>.',
-      5500
-    );
+    showDesignToast('Cambia tu Catrina', 'Toca la <b>paleta</b> · 1 a 3 personas', 6000);
   }, 1200);
 }
 
