@@ -76,8 +76,10 @@ document.getElementById('modalShareBtn')?.addEventListener('click', async () => 
     // Abre el menú nativo del celular con el archivo adjunto y el texto listo para elegir app (WhatsApp, IG, etc.)
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({ files: [file], text });
+      if (typeof Analytics !== 'undefined') Analytics.shareMedia('native_file', state.lastMedia.type);
     } else if (navigator.share) {
       await navigator.share({ text: [CONFIG.SHARE_TEXT, hashtags].filter(Boolean).join(' '), url: CONFIG.SITE_URL });
+      if (typeof Analytics !== 'undefined') Analytics.shareMedia('native_url', state.lastMedia.type);
     } else {
       await shareApp();   // sin menú nativo: copia el mensaje con el enlace
     }
@@ -96,6 +98,8 @@ async function shareMedia(target) {
     return; 
   }
   
+  if (typeof Analytics !== 'undefined') Analytics.shareMedia(target, state.lastMedia.type);
+
   const hashtags = CONFIG.HASHTAGS.map(h => '#' + h).join(' ');
   const text = [CONFIG.SHARE_TEXT, hashtags, CONFIG.SITE_URL].filter(Boolean).join(' ');
 
@@ -153,6 +157,7 @@ function copyToClipboard(text) {
  * El copiado se lanza primero y SIN esperar, para no perder el permiso del gesto del usuario antes de abrir el menú.
  */
 async function shareApp() {
+  if (typeof Analytics !== 'undefined') Analytics.shareApp('header_or_brand');
   const url = CONFIG.SITE_URL || appUrl();
   const hashtags = CONFIG.HASHTAGS.map(h => '#' + h).join(' ');
   const completo = `${CONFIG.APP_SHARE_TEXT}\n\n${url}\n\n${hashtags}`;

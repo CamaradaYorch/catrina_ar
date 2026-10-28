@@ -113,17 +113,35 @@ async function startRecording() {
   let left = CONFIG.RECORD_SECONDS;
   $('recTimer').textContent = `REC ${left}s`;
   
-  const timer = setInterval(() => {
+let recordTimer = null;
+
+  recordTimer = setInterval(() => {
     left--;
     $('recTimer').textContent = `REC ${left}s`;
     if (left <= 0) {
-      clearInterval(timer);
-      recorder.stop();
+      clearInterval(recordTimer);
+      if (recorder && recorder.state === 'recording') recorder.stop();
       state.isRecording = false;
       $('recBadge').classList.add('hidden');
       $('btnPhoto').disabled = $('btnVideo').disabled = false;
     }
   }, 1000);
+}
+
+/**
+ * Detiene inmediatamente la grabación si el usuario cambia de app o minimiza la ventana.
+ */
+function abortOrStopRecording() {
+  if (state.isRecording) {
+    clearInterval(recordTimer);
+    if (recorder && recorder.state === 'recording') {
+      try { recorder.stop(); } catch(e) {}
+    }
+    state.isRecording = false;
+    $('recBadge')?.classList.add('hidden');
+    if ($('btnPhoto')) $('btnPhoto').disabled = false;
+    if ($('btnVideo')) $('btnVideo').disabled = false;
+  }
 }
 
 
@@ -170,6 +188,8 @@ function downloadMedia() {
   const m = state.lastMedia;
   if (!m) return;
   
+  if (typeof Analytics !== 'undefined') Analytics.downloadMedia(m.type);
+
   const a = document.createElement('a');
   a.href = m.url; 
   a.download = `${CONFIG.FILE_PREFIX}_${Date.now()}.${m.ext}`; 

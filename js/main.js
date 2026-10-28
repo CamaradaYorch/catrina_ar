@@ -24,11 +24,17 @@ $('btnVideo').setAttribute('aria-label', `Grabar video de ${CONFIG.RECORD_SECOND
 /* ============ 02. ENLACE DE EVENTOS DE LA INTERFAZ PRINCIPAL ============ */
 // Evento para tomar una foto al hacer clic (bloqueado si hay una grabación activa)
 $('btnPhoto').addEventListener('click', () => { 
-  if (!state.isRecording) takePhoto(); 
+  if (!state.isRecording) {
+    takePhoto();
+    if (typeof Analytics !== 'undefined') Analytics.takePhoto((face.faces && face.faces.length) || 0);
+  }
 });
 
 // Evento para iniciar la grabación de video
-$('btnVideo').addEventListener('click', startRecording);
+$('btnVideo').addEventListener('click', () => {
+  startRecording();
+  if (typeof Analytics !== 'undefined') Analytics.recordVideo(CONFIG.RECORD_SECONDS, (face.faces && face.faces.length) || 0);
+});
 
 // Evento para abrir la ventana emergente (modal) con la última foto o video capturado
 $('btnLast').addEventListener('click', openModal);
@@ -37,14 +43,72 @@ $('btnLast').addEventListener('click', openModal);
 $('btnToggleMirror').addEventListener('click', () => { 
   state.mirrored = !state.mirrored; 
   resetFace(); 
+  if (typeof Analytics !== 'undefined') Analytics.toggleMirror(state.mirrored);
 });
 
 // Evento para alternar entre la cámara frontal (selfie) y la trasera
-$('btnFlipCamera').addEventListener('click', flipCamera);
+$('btnFlipCamera').addEventListener('click', () => {
+  flipCamera();
+  if (typeof Analytics !== 'undefined') Analytics.flipCamera(state.facing);
+});
 
+/* ============ CAMBIO DE ESTILO DE CATRINA (1 A 3 PERSONAS) ============ */
+let toastTimer = null;
 
-/* ============ 03. COMPARTIR LA APLICACIÓN (nombre «CatrinART» y botón de la cabecera) ============ */
-// Los dos copian el mensaje amistoso con el enlace de la app (CONFIG.SITE_URL) y abren el menú de compartir.
+function showDesignToast(title, desc, durationMs = 4500) {
+  const toast = $('designToast');
+  if (!toast) return;
+  $('designToastTitle').textContent = title;
+  $('designToastText').innerHTML = desc;
+  toast.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  if (durationMs > 0) {
+    toastTimer = setTimeout(() => {
+      toast.classList.add('hidden');
+    }, durationMs);
+  }
+}
+
+$('btnDismissToast')?.addEventListener('click', () => {
+  $('designToast')?.classList.add('hidden');
+  clearTimeout(toastTimer);
+});
+
+$('btnChangeDesign')?.addEventListener('click', () => {
+  const disenos = CONFIG.DISENOS || [];
+  if (!disenos.length) return;
+
+  state.disenoIndex = ((state.disenoIndex || 0) + 1) % disenos.length;
+  const current = disenos[state.disenoIndex];
+
+  // Actualiza paleta de maquillaje y badge numérico
+  if (typeof actualizarPaletaMaquillaje === 'function') {
+    actualizarPaletaMaquillaje(state.disenoIndex);
+  }
+  const badge = $('designBadge');
+  if (badge) badge.textContent = current.badge || (state.disenoIndex + 1);
+
+  // Efecto sonoro de cambio de estilo
+  if (typeof playPixelSound === 'function') playPixelSound('click');
+
+  // Muestra leyenda informativa al usuario confirmando que aplica a 1 o hasta 3 personas
+  const numCaras = (face.faces && face.faces.length) || 0;
+  const personasTexto = numCaras > 1 ? `aplicado a las <b>${numCaras} personas</b> en pantalla` : `aplicado para <b>1 o hasta 3 personas</b>`;
+  showDesignToast(
+    `Estilo: ${current.nombre}`,
+    `${current.desc}.<br>✨ Diseño ${personasTexto}.`,
+    4000
+  );
+
+  // Registro en Google Analytics
+  if (typeof Analytics !== 'undefined') {
+    Analytics.changeDesign(current.id, current.nombre, numCaras);
+  }
+});
+
+/* ============ 03. COMPARTIR LA APLICACIÓN (logo, nombre «CatrinART» y botón de la cabecera) ============ */
+// Copian el mensaje amistoso con el enlace de la app (CONFIG.SITE_URL) y abren el menú de compartir.
+$('btnBrandLogo')?.addEventListener('click', shareApp);
 $('btnBrandShare')?.addEventListener('click', shareApp);
 $('btnShare')?.addEventListener('click', shareApp);
 
@@ -115,8 +179,20 @@ async function launchApp() {
   if (ok) hideFlipButtonIfSingleCamera();
   if (face.ready) setStatus('');
 
+  // Registro de sesión en Google Analytics
+  if (typeof Analytics !== 'undefined') Analytics.appStart();
+
   // Logo del Centro Cultural (~2.5 s) y, al desvanecerse, la interfaz se "enciende" como TV antigua
   await mostrarLogoIntro();
+
+  // Muestra brevemente la leyenda explicativa para que el usuario conozca el botón de cambio de estilo
+  setTimeout(() => {
+    showDesignToast(
+      '¡Elige tu Catrina!',
+      'Usa el botón <b>🎨</b> arriba a la derecha para cambiar entre estilos. Funciona para <b>1 o hasta 3 personas</b>.',
+      5500
+    );
+  }, 1200);
 }
 
 const dormir = ms => new Promise(r => setTimeout(r, ms));

@@ -8,10 +8,17 @@
    Para cambiar colores o tamaños, edita la paleta COLOR y los factores de cada bloque.
    ================================================== */
 
-const COLOR = {
+let COLOR = {
   tinta: '#141018', base: 'rgba(250,247,241,.95)', sombra: 'rgba(95,125,160,.32)',
   naranja: '#f08a24', ambar: '#f2a93b', amarillo: '#f4c430', rojo: '#b3202a', vino: '#7e1722', hoja: '#4f7a2a'
 };
+
+/** Sincroniza los colores del maquillaje por código con el diseño seleccionado */
+function actualizarPaletaMaquillaje(idx) {
+  if (CONFIG.DISENOS && CONFIG.DISENOS[idx] && CONFIG.DISENOS[idx].paletaMaquillaje) {
+    Object.assign(COLOR, CONFIG.DISENOS[idx].paletaMaquillaje);
+  }
+}
 const OVALO = [10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109];
 const OJO_IZQ = [33,7,163,144,145,153,154,155,133,173,157,158,159,160,161,246];
 const OJO_DER = [362,382,381,380,374,373,390,249,263,466,388,387,386,385,384,398];

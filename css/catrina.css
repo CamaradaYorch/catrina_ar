@@ -1,7 +1,5 @@
 /* Ajustes de identidad de CATRINA AR (se carga después de styles.css) */
 :root { --amber: #ff8a00; --bg: #120a14; --card: #1d1222; --line: #3a2342; }
-.logo-emoji { display: inline-block; font-size: 72px; line-height: 1; }
-.brand .logo-emoji { font-size: 28px; }
 
 /* Nombre CatrinART en la cabecera: botón que copia y comparte el enlace de la app */
 .brand__title {
@@ -41,3 +39,211 @@
 @keyframes introFondo { 0%, 72% { opacity: 1; } 100% { opacity: 0; } }
 @media (orientation: landscape) and (max-height: 500px) { .intro-logo img { max-height: 60vh; width: min(60vw, 560px); } }
 @media (prefers-reduced-motion: reduce) { .intro-logo img { transform: none !important; } }
+
+/* ============ BOTÓN Y BADGE DE CAMBIO DE ESTILO DE CATRINA ============ */
+.round--palette {
+  position: relative;
+  border-color: rgba(255, 138, 0, 0.45);
+  box-shadow: 0 0 12px rgba(255, 138, 0, 0.25);
+  transition: transform .15s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.round--palette:hover {
+  border-color: var(--amber);
+  box-shadow: 0 0 16px rgba(255, 138, 0, 0.5);
+}
+.round--palette:active {
+  transform: scale(0.92);
+}
+.design-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: var(--amber);
+  color: #120a14;
+  font-size: 10px;
+  font-weight: 700;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #120a14;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+/* ============ LEYENDA / TOAST FLOTANTE INFORMATIVO ============ */
+.design-toast {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 74px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 420px);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(24, 14, 30, 0.88);
+  border: 1px solid rgba(255, 138, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 138, 0, 0.2);
+  color: #fff;
+  animation: toastSlideDown .35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: auto;
+}
+.design-toast.hidden {
+  display: none !important;
+}
+.design-toast__body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.design-toast__icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+.design-toast__info {
+  min-width: 0;
+}
+.design-toast__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--amber);
+  letter-spacing: .03em;
+  line-height: 1.25;
+}
+.design-toast__desc {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #f5f5f4;
+  line-height: 1.35;
+}
+.design-toast__desc strong {
+  color: #fff;
+}
+.design-toast__close {
+  background: none;
+  border: none;
+  color: #a8a29e;
+  font-size: 20px;
+  line-height: 1;
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  flex-shrink: 0;
+  transition: color .15s ease;
+}
+.design-toast__close:hover {
+  color: #fff;
+}
+
+@keyframes toastSlideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -15px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+/* ============ BOTÓN DEL LOGO EN LA CABECERA ============ */
+.brand__logo-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: block;
+  border-radius: 6px;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s ease, filter .15s ease;
+}
+.brand__logo-btn:hover {
+  filter: brightness(1.15) drop-shadow(0 0 8px rgba(255, 138, 0, 0.45));
+}
+.brand__logo-btn:active {
+  transform: scale(0.93);
+}
+
+/* ============ OVERLAY TÁCTIL PARA REANUDAR CÁMARA (iOS / Android) ============ */
+.resume-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.resume-overlay.hidden {
+  display: none !important;
+}
+.resume-overlay__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 32px;
+  border-radius: 18px;
+  background: rgba(29, 18, 34, 0.85);
+  border: 1px solid rgba(255, 138, 0, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 138, 0, 0.3);
+  animation: pulseResume 1.8s infinite ease-in-out;
+}
+.resume-overlay__icon {
+  font-size: 38px;
+}
+.resume-overlay__text {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--amber);
+  text-transform: uppercase;
+}
+@keyframes pulseResume {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+/* ============ CONTADOR DE VISITAS OFICIAL (MODO PRODUCCIÓN) ============ */
+.footer__counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px auto 0;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 138, 0, 0.3);
+  color: #d6d3d1;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+.footer__counter.hidden {
+  display: none !important;
+}
+.footer__counter-icon {
+  font-size: 14px;
+}
+#visitorCountNum {
+  color: var(--amber);
+  font-weight: 700;
+}
+

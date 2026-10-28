@@ -14,33 +14,78 @@
 // Este archivo agrupa todos los parámetros clave para personalizaciones rápidas sin modificar la lógica del sistema.
 const CONFIG = {
   
+  /* ============ GOOGLE ANALYTICS 4 (100% GRATUITO) ============ */
+  GA_MEASUREMENT_ID: 'G-9DDCDDFES5',
+
   /* ============ 01. PARÁMETROS DE GRABACIÓN Y RESOLUCIÓN GRÁFICA ============ */
   RECORD_SECONDS: 10,           // Duración predeterminada de la grabación de video (en segundos)
-  MAX_FACES: 3,                // Rostros simultáneos (más rostros = más carga en celulares de gama media)
-  DETECT_EVERY_MS: 66,         // Pausa mínima entre detecciones (66 ms ≈ 15 por segundo)
-  FACE_INPUT_SIDE: 480,        // Lado largo de la imagen que ve el modelo (menor = más rápido)
-  FACE_MODEL: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',   // Modelo alojado en este sitio (ver models/LEEME.txt)
+  MAX_FACES: 3,                // Rostros simultáneos (hasta 3 personas)
+  DETECT_EVERY_MS: 66,         // Pausa entre detecciones de la IA (~15 por segundo, mientras el render corre a 60 FPS)
+  FACE_INPUT_SIDE: 480,        // Lado largo para cámara frontal (selfie cercana, mínimo consumo de batería)
+  FACE_INPUT_SIDE_REAR: 640,   // Lado largo para cámara trasera (permite detectar rostros a 1.5 - 2 metros)
+  FACE_MODEL: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',   // Modelo de detección de rostros
   MEDIAPIPE_MJS: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs',
   MEDIAPIPE_WASM: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm',
-  TEXTURA_SVG: 'assets/catrina-textura.svg',   // Diseño del maquillaje sobre la malla (ver README)
-  DISENO_COMPLETO: 'assets/catrina-diseno.png',   // Respaldo: diseño completo (calavera + flores) si la malla/textura no carga. Puedes usar un .svg o .png transparente
-  DISENO_FLORES: 'assets/catrina-flores.png',     // Solo las flores y hojas (sin calavera): se dibujan sobre la malla en lugar de las flores hechas con código
-  TEXTURA_PX: 1024,            // Resolución a la que se rasteriza el SVG (512 en celulares muy lentos)
-  MALLA_CUBRIR_OJOS: true,     // true: la textura cubre también los ojos (la calavera no deja ver los ojos reales)
-  MALLA_CUBRIR_BOCA: false,    // false: al abrir la boca se ve la boca real; true: la textura la cubre también
-  ADORNOS_SOBRE_CALAVERA: ['frente', 'mejillas', 'barbilla', 'corona'],   // Capas de maquillaje sobre la textura; también: 'cuencas', 'nariz', 'boca'
-  MAX_CANVAS_SIDE: 1280,       // Resolución máxima del lado más largo para la foto o video final (en píxeles)
-  INTRO_LOGO_MS: 2500,         // Duración del logo del Centro Cultural al encender la app (aparece, se sostiene y se desvanece)
-  MOSTRAR_PROTOTIPO: true,     // true: marca de agua roja «PROTOTIPO» sobre toda la interfaz. Ponlo en false al aprobar el proyecto
+  TEXTURA_SVG: 'assets/catrina-textura.svg',   // Diseño base del maquillaje sobre la malla (ver README)
+  DISENO_COMPLETO: 'assets/catrina-diseno.png',   // Respaldo: diseño completo (calavera + flores)
+  DISENO_FLORES: 'assets/catrina-flores.png',     // Solo las flores y hojas
+  TEXTURA_PX: 512,            // 512 px corre a 60 FPS ultra fluidos en móviles (1024 en equipos potentes)
+  MALLA_CUBRIR_OJOS: true,     // true: la textura cubre también los ojos
+  MALLA_CUBRIR_BOCA: false,    // false: al abrir la boca se ve la boca real
+  ADORNOS_SOBRE_CALAVERA: ['frente', 'mejillas', 'barbilla', 'corona'],   // Capas de maquillaje
+  MAX_CANVAS_SIDE: 1280,       // Resolución máxima para fotos y videos exportados
+  INTRO_LOGO_MS: 2500,         // Duración del logo del Centro Cultural al encender la app
+  MOSTRAR_PROTOTIPO: true,     // true: marca de agua roja «PROTOTIPO». Ponlo en false al aprobar el proyecto
   LOGO_TEO: 'assets/logo-teo.png',   // Logo del Centro Cultural (blanco, fondo transparente)
-  MARCA_AGUA: true,            // true: el logo del Centro Cultural se imprime abajo en las fotos y videos
+  MARCA_AGUA: true,            // true: el logo del Centro Cultural se imprime abajo en fotos y videos
   MARCA_ABAJO_ALFA: 0.8,       // Opacidad del logo (0 a 1)
   MARCA_ABAJO_ANCHO: 0.34,     // Ancho del logo como fracción del ancho de la imagen
-  SONIDOS: true,               // true: los botones y la cámara tienen sonido (generado por código, sin archivos)
+  SONIDOS: true,               // true: los botones y la cámara tienen sonido
   SONIDO_VOLUMEN: 0.3,         // Volumen de los sonidos (0 a 1)
-  MARCA_EN_VIVO: false,        // false: el logo solo se ve en lo capturado (foto/video); true: también en la vista en vivo
-  FILE_PREFIX: 'catrinart',     // Prefijo asignado en el nombre de los archivos multimedia descargados
-  REAR_ZOOM: 1,                // Zoom de la cámara trasera (1 = sin zoom; 0.5 = más abierto, si el dispositivo lo permite)
+  MARCA_EN_VIVO: false,        // false: el logo solo se ve en lo capturado; true: también en vivo
+  FILE_PREFIX: 'catrinart',     // Prefijo asignado en el nombre de archivos multimedia
+  REAR_ZOOM: 1.25,             // Ligero zoom en cámara trasera para compensar el gran angular y detectar rostros lejanos
+
+  /* ============ CATÁLOGO DE ESTILOS DE CATRINA (INTERCAMBIABLES CON EL BOTÓN 🎨) ============ */
+  // Funciona automáticamente tanto si hay 1 sola persona como si hay hasta 3 personas en escena.
+  DISENOS: [
+    {
+      id: 'tradicional',
+      nombre: 'Cempasúchil Tradicional',
+      badge: '1',
+      desc: 'Flores de cempasúchil y calavera mexicana clásica',
+      colorTema: '#f2a93b',
+      filtroCss: 'none',
+      paletaMaquillaje: {
+        tinta: '#141018', base: 'rgba(250,247,241,.95)', sombra: 'rgba(95,125,160,.32)',
+        naranja: '#f08a24', ambar: '#f2a93b', amarillo: '#f4c430', rojo: '#b3202a', vino: '#7e1722', hoja: '#4f7a2a'
+      }
+    },
+    {
+      id: 'mictlan_neon',
+      nombre: 'Mictlán Neón',
+      badge: '2',
+      desc: 'Tonos místicos violeta, cian y magenta luminiscente',
+      colorTema: '#c026d3',
+      filtroCss: 'hue-rotate(185deg) saturate(1.8) contrast(1.1)',
+      paletaMaquillaje: {
+        tinta: '#0d0714', base: 'rgba(240,235,255,.95)', sombra: 'rgba(120,40,180,.4)',
+        naranja: '#ec4899', ambar: '#d946ef', amarillo: '#06b6d4', rojo: '#a855f7', vino: '#701a75', hoja: '#10b981'
+      }
+    },
+    {
+      id: 'oro_azteca',
+      nombre: 'Calavera de Oro',
+      badge: '3',
+      desc: 'Tonos oro bruñido, ámbar brillante y rubí imperial',
+      colorTema: '#eab308',
+      filtroCss: 'sepia(0.7) hue-rotate(15deg) saturate(2.4) contrast(1.2)',
+      paletaMaquillaje: {
+        tinta: '#1c1305', base: 'rgba(255,250,230,.96)', sombra: 'rgba(180,130,20,.35)',
+        naranja: '#f59e0b', ambar: '#fbbf24', amarillo: '#fde047', rojo: '#dc2626', vino: '#991b1b', hoja: '#15803d'
+      }
+    }
+  ],
 
   /* ============ 02. CONFIGURACIÓN DE MENSAJES, HASHTAGS Y ENLACES SOCIALES ============ */
   // Texto predeterminado para compartir, compatible con saltos de línea (\n) y negritas (*texto*)

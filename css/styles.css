@@ -114,13 +114,6 @@ a {
   touch-action: none;
 }
 
-/* Estado cuando la pantalla de carga desaparece */
-.splash--hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
 .splash__content {
   text-align: center;
   display: flex;
@@ -182,33 +175,10 @@ a {
   color: var(--amber);
 }
 
-/* Indicador de carga giratorio ámbar */
-.splash__loader {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(245, 158, 11, .15);
-  border-top-color: var(--amber);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 5px;
-}
-
 /* Animación de parpadeo estilo arcade / retro */
 @keyframes arcadeBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.2; }
-}
-
-/* ===== TV antigua: el splash se APAGA (colapsa a una línea)... ===== */
-.splash.splash--crt-off {
-  pointer-events: none;
-  transition: none;
-  animation: crtTurnOff 0.38s cubic-bezier(.7, 0, .84, 0) forwards;
-}
-@keyframes crtTurnOff {
-  0%   { transform: scale(1, 1);      filter: brightness(1); opacity: 1; }
-  55%  { transform: scale(1, 0.006);  filter: brightness(9); opacity: 1; }
-  100% { transform: scale(0, 0.006);  filter: brightness(14); opacity: 0; }
 }
 
 /* ===== ...y la app se ENCIENDE (línea que se abre + destello) ===== */
@@ -245,7 +215,7 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .splash.splash--crt-off, .camera-crt-reveal, .crt.is-active { animation: none; }
+  .camera-crt-reveal, .crt.is-active { animation: none; }
 }
 
 /* ============ 03. PANTALLA DE CÁMARA ============ */
@@ -296,16 +266,6 @@ body.is-front #pixelCanvas {
   gap: 10px;
   flex: 1;
   min-width: 0;
-}
-
-.brand__logo {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: rgba(245, 158, 11, .2);
-  border: 1px solid rgba(245, 158, 11, .45);
 }
 
 .brand__image {
@@ -488,15 +448,6 @@ body.is-front #pixelCanvas {
   flex-direction: column;
   align-items: center;
   gap: 18px;
-}
-
-.footer__credits {
-  font-size: 14px;
-  color: #d6d3d1;
-}
-
-.footer__credits strong {
-  color: var(--amber);
 }
 
 .footer__links {
@@ -902,10 +853,6 @@ body.is-front #pixelCanvas {
   50% {
     transform: translate(-50%, 4px);
   }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 
 @keyframes logoPulse {

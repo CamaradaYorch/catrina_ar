@@ -129,7 +129,7 @@ async function hideFlipButtonIfSingleCamera() {
  * Detiene por completo todas las pistas activas del flujo de video y libera el sensor de la cámara del dispositivo.
  */
 function stopCamera() {
-  const videoEl = document.getElementById('video') || (typeof video !== 'undefined' ? video : null);
+  const videoEl = document.getElementById('webcam') || document.getElementById('video') || (typeof video !== 'undefined' ? video : null);
   if (videoEl && videoEl.srcObject) {
     const stream = videoEl.srcObject;
     stream.getTracks().forEach(track => track.stop());
@@ -138,18 +138,55 @@ function stopCamera() {
 }
 
 
-/* ============ 05. CONTROL DE VISIBILIDAD Y CIERRE DE SESIÓN ============ */
-// Gestiona el cambio de pestaña asegurando que SOLO se reinicie la cámara 
-// si el usuario ya interactuó previamente con el botón "Pulsa para comenzar".
+/* ============ 05. CONTROL DE VISIBILIDAD Y REANUDACIÓN SIN RECARGAR ============ */
+let isReactivatingCamera = false;
+
+/**
+ * Reanuda la cámara exactamente donde el usuario la dejó (sin recargar la página ni reiniciar la app).
+ */
+async function resumeCameraSession() {
+  if (!appStarted || isReactivatingCamera) return;
+  isReactivatingCamera = true;
+
+  try {
+    const ok = await initCamera();
+    if (ok) {
+      document.getElementById('resumeOverlay')?.classList.add('hidden');
+    } else {
+      // Si el navegador (como Safari en iOS) exige un toque para reactivar el sensor
+      document.getElementById('resumeOverlay')?.classList.remove('hidden');
+    }
+  } catch (e) {
+    document.getElementById('resumeOverlay')?.classList.remove('hidden');
+  } finally {
+    isReactivatingCamera = false;
+  }
+}
+
+// Al tocar el overlay de reanudación, se reactiva con el gesto directo del usuario
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('resumeOverlay');
+  overlay?.addEventListener('click', async () => {
+    overlay.classList.add('hidden');
+    await initCamera();
+  });
+});
+
+// Gestiona el cambio de pestaña o app:
+// 1) Si estaba grabando, detiene la grabación para no dejar procesos colgados.
+// 2) Libera la cámara para ahorrar batería y no mantener el indicador de grabación encendido.
+// 3) Al regresar, reactiva la cámara en el mismo lente y con el mismo filtro sin recargar.
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
+    if (typeof abortOrStopRecording === 'function') abortOrStopRecording();
     stopCamera();
   } else if (appStarted) {
-    initCamera();
+    resumeCameraSession();
   }
 });
 
 // Libera y detiene la cámara de forma definitiva cuando la página se oculta o se cierra
 window.addEventListener('pagehide', () => {
+  if (typeof abortOrStopRecording === 'function') abortOrStopRecording();
   stopCamera();
 });

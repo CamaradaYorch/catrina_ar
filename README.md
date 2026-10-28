@@ -1,38 +1,45 @@
 # CatrinART
 
-Filtro web de realidad aumentada: dibuja sobre tu rostro un maquillaje de Catrina inspirado en el Día de Muertos. Toma fotos, graba video de 10 segundos y comparte por Redes sociales con #CatrinaAR y #DiaDeMuertos. No guarda datos de los usuarios.
+Filtro web de realidad aumentada del Centro Cultural Teopanzolco: dibuja sobre tu rostro un maquillaje de Catrina inspirado en el Día de Muertos. Toma fotos, graba video de 10 segundos y compártelos con #CCT #CatrinART #Miquixtli. No guarda datos de los usuarios.
 
+App publicada: https://catrina-ar.netlify.app/
 
-## Estado: fase 1
-- Hecho: rostros de personas (hasta 3 a la vez), estilo Catrina dibujado con código (arte original), foto, video, compartir, aviso de navegadores internos, splash y páginas legales.
-- Pendiente: selector de estilo (Catrín, niña, niño), mascotas, retoque del arte con base en pruebas reales.
-- NO probado: cámara en celular real, rendimiento en gama media y la carga del modelo. Se probó solo la lógica de dibujo con un rostro simulado.
+## Estado
+- Hecho: rostros (hasta 3 a la vez), malla facial con textura, flores del diseño de la Catrina, foto, video, compartir (fotos/videos y la propia app), logo del Centro Cultural al arrancar y como marca de agua, sonidos, aviso para navegadores internos de redes, splash, páginas legales y marca «PROTOTIPO».
+- Pendiente: mascotas y retoque del arte con base en pruebas reales.
+- Falta probar: cámara en celulares reales (iPhone y Android de gama media/baja), rendimiento y carga del modelo con conexión débil.
 
-## Antes de usarlo: descarga el modelo (una vez)
-Sigue `models/LEEME.txt`: guarda `face_landmarker.task` dentro de `models/`. Sin ese archivo se ve solo el video.
-
-## Estructura de js/ (orden de carga en index.html)
-config.js (ajustes) · state.js · inapp.js · face.js (MediaPipe Face Landmarker) · camera.js · catrina.js (maquillaje y bucle) · share.js · capture.js · main.js
+## Estructura
+- `index.html` · `terminos.html` · `privacidad.html` · `manifest.webmanifest` · `_headers` (cabeceras de seguridad y caché para Netlify)
+- `js/` (orden de carga en index.html): config · state · inapp · face · camera · maquillaje · malla-datos · malla · diseno · marca · sonido · catrina · share · capture · main
+- `css/` styles.css (base) y catrina.css (identidad y ajustes)
+- `assets/`: catrina-textura.svg (malla), catrina-flores.png, catrina-diseno.png, logo-teo.png, prototipo.svg, preview.jpg
+- `img/`: logo.png, icons/ (favicon e íconos), at-arquitectos.png
 
 ## Probar y publicar
-`python3 -m http.server 8000` y abre http://localhost:8000 (la cámara exige HTTPS o localhost; en celular usa un túnel como cloudflared). Es un sitio estático: sube la carpeta a Netlify. Después pon tu dirección en `SITE_URL` (js/config.js) y agrega las etiquetas og:url y og:image en index.html.
+`python3 -m http.server 8000` y abre http://localhost:8000 (la cámara exige HTTPS o localhost; en celular usa un túnel como cloudflared). Es un sitio estático: sube la carpeta a Netlify. La dirección pública está en `SITE_URL` (js/config.js) y en las etiquetas og:url y og:image de index.html.
+
+## Modelo de detección de rostros
+Se descarga de Google Cloud Storage (`CONFIG.FACE_MODEL`). Para alojarlo en tu sitio, sigue `public/models/LEEME.txt` y actualiza privacidad.html.
 
 ## Ajustes útiles (js/config.js)
-MAX_FACES (rostros), DETECT_EVERY_MS y FACE_INPUT_SIDE (rendimiento), SHARE_TEXT, HASHTAGS.
-
-## Terceros declarados en privacidad.html
-jsDelivr (librería y WASM de MediaPipe) y Google Fonts. El modelo va en tu propio sitio.
+- **Google Analytics 4 (100% gratuito):** `GA_MEASUREMENT_ID: 'G-XXXXXXXXXX'`. Crea tu flujo web gratis en [Google Analytics](https://analytics.google.com) y pega tu ID para registrar visitas, fotos, videos y estilos elegidos.
+- **Catálogo de estilos:** `CONFIG.DISENOS`: incluye 3 diseños (Cempasúchil Tradicional, Mictlán Neón y Calavera de Oro) que se alternan con el botón `🎨` para 1 a 3 personas simultáneas.
+- **Rendimiento y fluidez (60 FPS):** La inferencia de IA está desacoplada del render principal; `TEXTURA_PX: 512` optimizado para GPU móvil.
+- **Alcance cámara trasera:** `FACE_INPUT_SIDE_REAR: 640` y `REAR_ZOOM: 1.25` para captar rostros a 1.5 - 2 metros sin perder el filtro.
+- Arranque: INTRO_LOGO_MS (duración del logo, 2.5 s).
+- Marca «PROTOTIPO»: `MOSTRAR_PROTOTIPO: false` al aprobar el proyecto (o borra el bloque `#prototipoMarca` de index.html).
+- Marca de agua del logo en fotos y videos: MARCA_AGUA, MARCA_ABAJO_ALFA, MARCA_ABAJO_ANCHO, MARCA_EN_VIVO, LOGO_TEO.
+- Sonidos: SONIDOS, SONIDO_VOLUMEN.
+- Compartir: SHARE_TEXT, APP_SHARE_TEXT, HASHTAGS, SITE_URL.
 
 ## Maquillaje
-- **Flores y respaldo (js/diseno.js):** `assets/catrina-flores.png` (solo flores y hojas) se dibuja sobre la malla en lugar de las flores hechas con código. `assets/catrina-diseno.png` (calavera + flores) se usa como respaldo si la malla/textura no carga. Rutas en `CONFIG.DISENO_FLORES` y `CONFIG.DISENO_COMPLETO`; puedes cambiarlas por `.svg` o `.png` con fondo transparente (si cambia el encuadre, ajusta `ANCLA` en `diseno.js`).
-- **Malla con textura (principal):** `assets/catrina-textura.svg` se estira sobre la malla facial (`js/malla.js`, datos en `js/malla-datos.js`, generados del `canonical_face_model.obj` de MediaPipe). El SVG está en el espacio UV: se diseña sobre `canonical_face_model_uv_visualization.png` como guía. Fondo transparente, 1024x1024, sin filtros ni imágenes incrustadas.
-- **Corona y respaldo:** `js/maquillaje.js` dibuja la corona de flores y, si la malla no carga, todo el maquillaje.
+- **Malla multi-estilo (WebGL):** `js/malla.js` compila los estilos de `CONFIG.DISENOS` en texturas de GPU independientes. Al presionar el botón `🎨`, la textura cambia instantáneamente sin recargas.
+- **Flores y respaldo (`js/diseno.js`):** `catrina-flores.png` (solo flores y hojas) se dibuja sobre la malla; `catrina-diseno.png` (calavera + flores) se usa si la malla no carga.
+- **Último respaldo:** `js/maquillaje.js` dibuja con código todo el maquillaje si no cargan las imágenes, adaptando su paleta de color al estilo activo.
 
-## Marca y compartir
-- Logo y favicon: `img/logo.png`, `favicon.ico`, `img/icons/` y `manifest.webmanifest` (todo generado de Catrinart.png). Imagen para redes: `assets/preview.jpg`.
-- Al tocar el nombre «CatrinART» (o el botón de compartir) se copia el mensaje con el enlace `CONFIG.SITE_URL` y se abre el menú de compartir. Texto en `CONFIG.APP_SHARE_TEXT`.
+## Terceros declarados en privacidad.html
+jsDelivr (librería y WASM de MediaPipe), Google Cloud Storage (modelo) y Google Fonts.
 
-## Logo del Centro Cultural, marca de agua y PROTOTIPO
-- Al pulsar «Comenzar» y aceptar la cámara aparece `assets/logo-teo.png` centrado sobre negro (`CONFIG.INTRO_LOGO_MS`, 2.5 s) y se desvanece hasta la interfaz.
-- Fotos y videos llevan el logo (solo abajo) desde `js/marca.js`; se ajusta con `MARCA_*` en `config.js`.
-- La marca roja `assets/prototipo.svg` cubre la pantalla: quítala con `MOSTRAR_PROTOTIPO: false` o borrando el bloque `#prototipoMarca` en `index.html`.
+## Seguridad
+`_headers` incluye HSTS, anti-iframe, permisos mínimos y una política CSP en modo prueba (Report-Only). Cuando la app funcione sin avisos en la consola (F12), cambia `Content-Security-Policy-Report-Only` por `Content-Security-Policy` para activarla.

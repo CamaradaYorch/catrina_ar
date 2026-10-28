@@ -37,7 +37,11 @@ async function initFace() {
           outputFaceBlendshapes: false,
           
           // CLAVE: Desactiva los puntos extra de iris/ojos para fijar la malla en 468 vértices exactos
-          refineLandmarks: false 
+          refineLandmarks: false,
+          // Umbrales calibrados para captar rostros lejanos a 1-2 metros sin perderlos ante movimientos
+          minFaceDetectionConfidence: 0.35,
+          minFacePresenceConfidence: 0.35,
+          minTrackingConfidence: 0.35
         });
         break;
       } catch (e) { console.warn('Face Landmarker con', delegate, 'falló:', e); }
@@ -55,14 +59,16 @@ async function initFace() {
   face.loading = false;
 }
 
-/** Tamaño estable de la entrada: lado largo = CONFIG.FACE_INPUT_SIDE, con la proporción de la pantalla. */
+/** Tamaño estable de la entrada: ajusta según cámara frontal (480px) o trasera (640px) para largo alcance. */
 function sizeFaceInput(w, h) {
-  const k = CONFIG.FACE_INPUT_SIDE / Math.max(w, h);
+  const isRear = (typeof state !== 'undefined' && state.facing === 'environment');
+  const baseSide = isRear ? (CONFIG.FACE_INPUT_SIDE_REAR || 640) : (CONFIG.FACE_INPUT_SIDE || 480);
+  const k = baseSide / Math.max(w, h);
   faceInput.width = Math.round(w * k);
   faceInput.height = Math.round(h * k);
 }
 
-/** Pide nuevos puntos al modelo (limitado a CONFIG.DETECT_EVERY_MS) y los suaviza de forma uniforme para evitar temblor y desgarros. */
+/** Pide nuevos puntos al modelo con tolerancia temporal (no pierde el filtro a distancia si hay 1 fotograma borroso). */
 function detectFaces() {
   if (!face.model) return;
   const now = performance.now();
@@ -75,13 +81,24 @@ function detectFaces() {
 
   try {
     const found = face.model.detectForVideo(faceInput, face.lastTs).faceLandmarks || [];
-    const old = face.faces;
     
+    // Si la persona se aleja a 1m o más, un parpadeo o sombra no tira el filtro de inmediato (tolerancia de 3 cuadros)
+    if (found.length === 0) {
+      face.lostCount = (face.lostCount || 0) + 1;
+      if (face.lostCount <= 3 && face.faces.length > 0) {
+        return; // Mantiene el tracking sin parpadeo
+      }
+      face.faces = [];
+      return;
+    }
+    face.lostCount = 0;
+
+    const old = face.faces;
     // Mapeo uniforme y seguro para toda la malla 3D (evita cualquier ruptura de triángulos)
     face.faces = found.map((pts, i) => {
       const prev = old.length === found.length ? old[i] : null;
       return pts.map((p, j) => prev
-        ? { x: prev[j].x * 0.4 + p.x * 0.6, y: prev[j].y * 0.4 + p.y * 0.6 }
+        ? { x: prev[j].x * 0.35 + p.x * 0.65, y: prev[j].y * 0.35 + p.y * 0.65 }
         : { x: p.x, y: p.y });
     });
   } catch (e) { /* un cuadro fallido se ignora */ }
@@ -89,5 +106,6 @@ function detectFaces() {
 
 /** Olvida los rostros actuales (al voltear espejo o cambiar de cámara). */
 function resetFace() { 
-  face.faces = []; 
+  face.faces = [];
+  face.lostCount = 0;
 }

@@ -1,9 +1,9 @@
-Coloca aquí el archivo del modelo, con este nombre exacto:
+Modelo de detección de rostros (opcional: alojarlo en tu propio sitio)
 
-  models/face_landmarker.task
-
-Descárgalo una sola vez desde:
+Hoy la app lo descarga de Google Cloud Storage (CONFIG.FACE_MODEL en js/config.js), así que este archivo no es obligatorio.
+Si prefieres no depender de ese servidor:
+  1) Deja aquí  public/models/face_landmarker.task
+  2) En js/config.js cambia FACE_MODEL a  'public/models/face_landmarker.task'
+  3) Actualiza privacidad.html (el modelo ya no vendría de Google).
+Descarga original:
   https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task
-
-(En el navegador: abre el enlace y guarda el archivo, o con: curl -o models/face_landmarker.task <enlace>)
-Sin este archivo el filtro no dibuja la Catrina y se ve solo el video.
