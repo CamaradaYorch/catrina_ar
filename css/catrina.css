@@ -239,11 +239,15 @@
 .footer__counter.hidden {
   display: none !important;
 }
-.footer__counter-icon {
-  font-size: 14px;
+.footer__counter-label {
+  color: #e7e5e4;
+  font-size: 11px;
 }
-#visitorCountNum {
-  color: var(--amber);
-  font-weight: 700;
+.footer__counter-img {
+  display: inline-block;
+  vertical-align: middle;
+  height: 18px;
+  width: auto;
+  border-radius: 3px;
 }
 
