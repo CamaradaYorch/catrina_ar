@@ -12,6 +12,7 @@ const marca = { logo: null, ratio: 0.277 };   // ratio = alto / ancho del logo
 
 /** Carga el logo una sola vez y lo deja listo en un canvas. Si falla, la app sigue sin marca de agua. */
 async function initMarca() {
+  if (!CONFIG.MARCA_AGUA) return;   // desactivada: no se descarga el logo
   try {
     const img = new Image();
     img.src = CONFIG.LOGO_TEO;

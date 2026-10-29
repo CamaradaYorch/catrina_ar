@@ -176,7 +176,8 @@ async function launchApp() {
   appLaunched = true;
 
   splashStart.disabled = true;
-  splashStart.textContent = '> MIQUIXTLI <';
+  // splashStart.textContent = '> MIQUIXTLI <';   // (texto anterior)
+  splashStart.textContent = '> INICIAR <';
   splash.classList.add('is-starting');
   if (typeof playPixelSound === 'function') playPixelSound('poweron');
 

@@ -92,31 +92,75 @@ const Analytics = {
   /** Cuenta activa según el modo de la marca PROTOTIPO. */
   modo: () => (typeof CONFIG !== 'undefined' && CONFIG.MOSTRAR_PROTOTIPO) ? 'prototipo' : 'produccion',
 
-  /** Muestra el número de la cuenta activa ('get') o le suma uno y lo muestra ('up'). Siempre visible: si el servicio falla, muestra el último número conocido. */
+  // ---- Versión anterior del contador en la página (CounterAPI v1, ya retirada; desactivada) ----
+  // /** Muestra el número de la cuenta activa ('get') o le suma uno y lo muestra ('up'). Siempre visible: si el servicio falla, muestra el último número conocido. */
+  // contador: async (accion) => {
+  //   const box = document.getElementById('visitorCounter');
+  //   const num = document.getElementById('visitorCountNum');
+  //   if (!box || !num) return;
+  //   const modo = Analytics.modo();
+  //   const CACHE = 'catrinart_contador_' + modo;
+  //   const mostrar = n => { num.textContent = Number(n || 0).toLocaleString('es-MX'); box.classList.remove('hidden'); };
+  //   let ultimo = 0;
+  //   try { ultimo = parseInt(localStorage.getItem(CACHE) || '0', 10) || 0; } catch (e) {}
+  //   if (accion !== 'up') mostrar(ultimo);          // se ve de inmediato con el último valor conocido
+  //   try {
+  //     const url = 'https://api.counterapi.dev/v1/catrinart_cct_oficial/usuarios_' + modo + (accion === 'up' ? '/up' : '');
+  //     const res = await fetch(url);
+  //     if (res.status === 404) { mostrar(0); return; }   // aún no existe: va en cero
+  //     if (!res.ok) throw new Error('contador ' + res.status);
+  //     const data = await res.json();
+  //     mostrar(data.count);
+  //     try { localStorage.setItem(CACHE, String(data.count || 0)); } catch (e) {}
+  //   } catch (e) {
+  //     console.warn('Contador no disponible:', e);
+  //     if (accion === 'up') mostrar(ultimo + 1);       // sin red: se muestra la suma local para no dejar la cifra congelada
+  //   }
+  // }
+  // ---- Fin versión anterior ----
+
+  /**
+   * CONTADOR EN LA CONSOLA. Suma uno por cada foto o video ('up') o solo consulta el total ('get') y lo escribe en la
+   * consola del navegador (F12 > Consola). También puedes escribir  catrinartUsuarios()  en la consola para verlo.
+   * - Con CONFIG.COUNTER_WORKSPACE (CounterAPI v2) el total es el de TODOS los usuarios.
+   * - Sin él, solo cuenta lo que ese dispositivo ha creado (el total real de todos está en Google Analytics: evento «visita_creador»).
+   */
   contador: async (accion) => {
-    const box = document.getElementById('visitorCounter');
-    const num = document.getElementById('visitorCountNum');
-    if (!box || !num) return;
     const modo = Analytics.modo();
     const CACHE = 'catrinart_contador_' + modo;
-    const mostrar = n => { num.textContent = Number(n || 0).toLocaleString('es-MX'); box.classList.remove('hidden'); };
-    let ultimo = 0;
-    try { ultimo = parseInt(localStorage.getItem(CACHE) || '0', 10) || 0; } catch (e) {}
-    if (accion !== 'up') mostrar(ultimo);          // se ve de inmediato con el último valor conocido
-    try {
-      const url = 'https://api.counterapi.dev/v1/catrinart_cct_oficial/usuarios_' + modo + (accion === 'up' ? '/up' : '');
-      const res = await fetch(url);
-      if (res.status === 404) { mostrar(0); return; }   // aún no existe: va en cero
-      if (!res.ok) throw new Error('contador ' + res.status);
-      const data = await res.json();
-      mostrar(data.count);
-      try { localStorage.setItem(CACHE, String(data.count || 0)); } catch (e) {}
-    } catch (e) {
-      console.warn('Contador no disponible:', e);
-      if (accion === 'up') mostrar(ultimo + 1);       // sin red: se muestra la suma local para no dejar la cifra congelada
+    let local = 0;
+    try { local = parseInt(localStorage.getItem(CACHE) || '0', 10) || 0; } catch (e) {}
+    if (accion === 'up') { local++; try { localStorage.setItem(CACHE, String(local)); } catch (e) {} }
+
+    let total = null, origen = 'solo este dispositivo; configura COUNTER_WORKSPACE para el total de todos';
+    if (typeof CONFIG !== 'undefined' && CONFIG.COUNTER_WORKSPACE) {
+      try {
+        const url = 'https://api.counterapi.dev/v2/' + encodeURIComponent(CONFIG.COUNTER_WORKSPACE) + '/usuarios_' + modo + (accion === 'up' ? '/up' : '');
+        const res = await fetch(url, CONFIG.COUNTER_TOKEN ? { headers: { Authorization: 'Bearer ' + CONFIG.COUNTER_TOKEN } } : {});
+        if (!res.ok) throw new Error('CounterAPI respondió ' + res.status);
+        const n = Analytics.numeroDe(await res.json());
+        if (n !== null) { total = n; origen = 'todos los usuarios'; }
+      } catch (e) {
+        console.warn('Contador remoto no disponible:', e.message || e);
+      }
     }
+    const n = total !== null ? total : local;
+    console.info('%c👥 CatrinART · usuarios (' + modo + '): ' + n.toLocaleString('es-MX') + ' %c(' + origen + ')',
+      'font-weight:700;color:#ff8a00;font-size:13px', 'color:#999');
+    return n;
+  },
+
+  /** Busca el valor numérico del contador en la respuesta (count, up_count o value), sin depender del formato exacto. */
+  numeroDe: (j) => {
+    if (j == null) return null;
+    if (typeof j === 'number') return j;
+    if (typeof j !== 'object') return null;
+    for (const k of ['count', 'up_count', 'value']) if (typeof j[k] === 'number') return j[k];
+    for (const k of Object.keys(j)) { const r = Analytics.numeroDe(j[k]); if (r !== null) return r; }
+    return null;
   }
 };
 
 // Al cargar la página solo se MUESTRA el número actual de la cuenta activa (no suma).
 document.addEventListener('DOMContentLoaded', () => Analytics.contador('get'));
+window.catrinartUsuarios = () => Analytics.contador('get');   // escribe  catrinartUsuarios()  en la consola para ver el total

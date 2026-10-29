@@ -34,9 +34,11 @@ const CONFIG = {
   MALLA_CUBRIR_BOCA: false,    // false: al abrir la boca se ve la boca real
   MAX_CANVAS_SIDE: 1280,       // Resolución máxima para fotos y videos exportados
   INTRO_LOGO_MS: 2500,         // Duración del logo del Centro Cultural al encender la app
-  MOSTRAR_PROTOTIPO: true,     // true: marca de agua roja «PROTOTIPO». Ponlo en false al aprobar el proyecto
+  // MOSTRAR_PROTOTIPO: true,   // (modo prueba: muestra la marca roja «PROTOTIPO»)
+  MOSTRAR_PROTOTIPO: false,     // true: marca de agua roja «PROTOTIPO». Ponlo en false al aprobar el proyecto
   LOGO_TEO: 'assets/logo-teo.png',   // Logo del Centro Cultural (blanco, fondo transparente)
-  MARCA_AGUA: true,            // true: el logo del Centro Cultural se imprime abajo en fotos y videos
+  // MARCA_AGUA: true,   // (logo del Teopanzolco en fotos y videos: desactivado; para volver a usarlo, activa esta línea y comenta la siguiente)
+  MARCA_AGUA: false,            // true: el logo del Centro Cultural se imprime abajo en fotos y videos
   MARCA_ABAJO_ALFA: 0.8,       // Opacidad del logo (0 a 1)
   MARCA_ABAJO_ANCHO: 0.34,     // Ancho del logo como fracción del ancho de la imagen
   SONIDOS: true,               // true: los botones y la cámara tienen sonido
@@ -112,18 +114,39 @@ const CONFIG = {
 
   /* ============ 02. CONFIGURACIÓN DE MENSAJES, HASHTAGS Y ENLACES SOCIALES ============ */
   // Texto predeterminado para compartir, compatible con saltos de línea (\n) y negritas (*texto*)
-  SHARE_TEXT: `*¡Ven al Centro Cultural Teopanzolco y crea tu propia CatrinART!* 💀
+  // ---- Versión anterior (desactivada) ----
+  //   SHARE_TEXT: `*¡Ven al Centro Cultural Teopanzolco y crea tu propia CatrinART!* 💀
+  //
+  // ¡Anímate a tomar la tuya, vive la tradición y compártela con todos tus amigos! ✨`,
+  //
+  //   HASHTAGS: ['CCT', 'CatrinART', 'Miquixtli'], // Etiquetas (hashtags) asociadas
+  //
+  //   // Mensaje amistoso al tocar el nombre «CatrinART» (o el botón de compartir de la cabecera). El enlace se agrega al final.
+  //   APP_SHARE_TITLE: 'CatrinART',
+  //   APP_SHARE_TEXT: `¡Hola! 💀🌼 Te invito a crear tu propia CatrinART con realidad aumentada, cortesía del Centro Cultural Teopanzolco. Es gratis y se usa desde tu celular. ¡Anímate y compártela con tus amigos! ✨`,
+  //
+  //   SITE_URL: 'https://catrina-ar.netlify.app/',                               // URL pública de despliegue (se incluye automáticamente al compartir enlaces)
+  // ---- Fin versión anterior ----
 
-¡Anímate a tomar la tuya, vive la tradición y compártela con todos tus amigos! ✨`,
+  // Título que ven los usuarios en el menú de compartir
+  SHARE_TITLE: 'CatrinART - Experiencia de Realidad Aumentada',
+  SHARE_TEXT: `*¡Crea tu propia CatrinART!* 💀
 
-  HASHTAGS: ['CCT', 'CatrinART', 'Miquixtli'], // Etiquetas (hashtags) asociadas
+CatrinART - Experiencia de Realidad Aumentada. ¡Anímate a tomar la tuya, vive la tradición y compártela con todos tus amigos! ✨`,
+
+  HASHTAGS: ['Miquixtli', 'CatrinART', 'DiaDeMuertos'],   // Etiquetas (hashtags) asociadas
 
   // Mensaje amistoso al tocar el nombre «CatrinART» (o el botón de compartir de la cabecera). El enlace se agrega al final.
-  APP_SHARE_TITLE: 'CatrinART',
-  APP_SHARE_TEXT: `¡Hola! 💀🌼 Te invito a crear tu propia CatrinART con realidad aumentada, cortesía del Centro Cultural Teopanzolco. Es gratis y se usa desde tu celular. ¡Anímate y compártela con tus amigos! ✨`,
-  
-  SITE_URL: 'https://catrina-ar.netlify.app/',                               // URL pública de despliegue (se incluye automáticamente al compartir enlaces)
-  
+  APP_SHARE_TITLE: 'CatrinART - Experiencia de Realidad Aumentada',
+  APP_SHARE_TEXT: `¡Hola! 💀🌼 Te invito a vivir CatrinART, una experiencia de realidad aumentada para Día de Muertos. Es gratis y se usa desde tu celular. ¡Anímate y compártela con tus amigos! ✨`,
+
+  SITE_URL: 'https://catrina-ar.netlify.app/',   // URL pública de despliegue (se incluye automáticamente al compartir enlaces)
+
+  // Contador de usuarios (se muestra en la consola del navegador). Servicio CounterAPI v2: crea una cuenta en counterapi.dev,
+  // un workspace y una clave, y pon aquí el nombre del workspace. Vacío = solo cuenta en cada dispositivo.
+  COUNTER_WORKSPACE: '',
+  COUNTER_TOKEN: '',
+
   X_INTENT_URL: 'https://x.com/intent/tweet', // URL base oficial para los intents de publicación en la red social X
   WHATSAPP_URL: 'https://api.whatsapp.com/send',   // URL base oficial para la API de mensajes de WhatsApp
 };

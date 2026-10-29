@@ -1,7 +1,7 @@
 {
   "name": "CatrinART",
   "short_name": "CatrinART",
-  "description": "Crea tu propia Catrina en realidad aumentada. Centro Cultural Teopanzolco.",
+  "description": "Crea tu propia Catrina en realidad aumentada para Día de Muertos.",
   "lang": "es-MX",
   "start_url": "./",
   "scope": "./",

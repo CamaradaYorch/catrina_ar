@@ -1,6 +1,7 @@
 # CatrinART
 
-Filtro web de realidad aumentada del Centro Cultural Teopanzolco: dibuja sobre tu rostro un maquillaje de Catrina inspirado en el Día de Muertos. Toma fotos, graba video de 10 segundos y compártelos con #CCT #CatrinART #Miquixtli. No guarda datos de los usuarios.
+<!-- Versión anterior: Filtro web de realidad aumentada del Centro Cultural Teopanzolco: -->
+CatrinART - Experiencia de Realidad Aumentada: dibuja sobre tu rostro un maquillaje de Catrina inspirado en el Día de Muertos. Toma fotos, graba video de 10 segundos y compártelos con #CCT #CatrinART #Miquixtli. No guarda datos de los usuarios.
 
 App publicada: https://catrina-ar.netlify.app/
 
@@ -43,3 +44,10 @@ jsDelivr (librería y WASM de MediaPipe), Google Cloud Storage (modelo) y Google
 
 ## Seguridad
 `_headers` incluye HSTS, anti-iframe, permisos mínimos y una política CSP en modo prueba (Report-Only). Cuando la app funcione sin avisos en la consola (F12), cambia `Content-Security-Policy-Report-Only` por `Content-Security-Policy` para activarla.
+
+## Cambios de la versión de publicación
+- Pantalla de inicio: `assets/logo-app.svg` (antes el logo del Teopanzolco, que sigue en `assets/logo-teo.png` y comentado en index.html y catrina.css).
+- El botón de inicio dice «INICIAR». Marca «PROTOTIPO» desactivada (`MOSTRAR_PROTOTIPO: false`). Marca de agua del logo desactivada (`MARCA_AGUA: false`).
+- Pie de página: «Jorge Mera» enlaza a https://www.instagram.com/jorge_mortem/ (el bloque de AT Arquitectos quedó comentado en index.html).
+- Compartir: título «CatrinART - Experiencia de Realidad Aumentada» y hashtags #Miquixtli #CatrinART #DiaDeMuertos (config.js; los textos anteriores quedaron comentados).
+- Contador: se muestra en la consola del navegador (F12) y con `catrinartUsuarios()`. Para el total de todos los usuarios configura `COUNTER_WORKSPACE` (CounterAPI v2) o consulta el evento `visita_creador` en Google Analytics.

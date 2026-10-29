@@ -24,20 +24,19 @@
 /* ============ Logo del Centro Cultural al encender la app (negro, centrado, adaptable) ============
    Duración total = CONFIG.INTRO_LOGO_MS (2.5 s). La capa negra se desvanece al final y deja ver la interfaz. */
 .intro-logo {
-  position: fixed; inset: 0; z-index: 150; background: #000;
+  position: fixed; inset: 0; z-index: 150; background: #021032;   /* mismo azul del Logo_APP.svg (antes: #000) */
   display: flex; align-items: center; justify-content: center;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   pointer-events: all;
 }
-.intro-logo img {
-  display: block; width: min(80vw, 640px); max-height: 45vh; height: auto; object-fit: contain;
-  opacity: 0;
-}
+/* (Logo del Teopanzolco, desactivado) .intro-logo img { display: block; width: min(80vw, 640px); max-height: 45vh; height: auto; object-fit: contain; opacity: 0; } */
+/* Logo_APP.svg: pantalla vertical completa; en pantallas anchas se centra con el mismo fondo */
+.intro-logo img { display: block; width: 100%; height: 100%; object-fit: contain; opacity: 0; }
 .intro-logo.is-playing { animation: introFondo var(--intro-ms, 2500ms) ease both; }
 .intro-logo.is-playing img { animation: introLogo var(--intro-ms, 2500ms) ease both; }
 @keyframes introLogo  { 0% { opacity: 0; transform: scale(.96); } 24% { opacity: 1; transform: scale(1); } 74% { opacity: 1; } 100% { opacity: 1; transform: scale(1.01); } }
 @keyframes introFondo { 0%, 72% { opacity: 1; } 100% { opacity: 0; } }
-@media (orientation: landscape) and (max-height: 500px) { .intro-logo img { max-height: 60vh; width: min(60vw, 560px); } }
+/* (Teopanzolco, desactivado) @media (orientation: landscape) and (max-height: 500px) { .intro-logo img { max-height: 60vh; width: min(60vw, 560px); } } */
 @media (prefers-reduced-motion: reduce) { .intro-logo img { transform: none !important; } }
 
 /* ============ BOTÓN Y BADGE DE CAMBIO DE ESTILO DE CATRINA ============ */
@@ -176,3 +175,10 @@
   font-size: 15px; font-weight: 700; letter-spacing: .12em; color: var(--amber);
   font-variant-numeric: tabular-nums;
 }
+
+/* ============ Nombre del autor en el pie de página (enlace a su Instagram) ============ */
+.footer__author {
+  display: inline-block; padding: 10px 14px; color: var(--amber); font-weight: 700; font-size: 15px;
+  letter-spacing: .12em; text-transform: uppercase; text-decoration: none;
+}
+.footer__author:hover, .footer__author:focus-visible { text-decoration: underline; outline: none; }

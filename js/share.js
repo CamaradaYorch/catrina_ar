@@ -75,7 +75,7 @@ document.getElementById('modalShareBtn')?.addEventListener('click', async () => 
     const file = await prepareShareFile();
     // Abre el menú nativo del celular con el archivo adjunto y el texto listo para elegir app (WhatsApp, IG, etc.)
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], text });
+      await navigator.share({ files: [file], title: CONFIG.APP_SHARE_TITLE, text });
       if (typeof Analytics !== 'undefined') Analytics.shareMedia('native_file', state.lastMedia.type);
     } else if (navigator.share) {
       await navigator.share({ text: [CONFIG.SHARE_TEXT, hashtags].filter(Boolean).join(' '), url: CONFIG.SITE_URL });
@@ -109,7 +109,7 @@ async function shareMedia(target) {
     try {
       const file = await prepareShareFile();
       if (file && navigator.canShare && navigator.canShare({ files: [file] })) { 
-        await navigator.share({ files: [file], text }); 
+        await navigator.share({ files: [file], title: CONFIG.APP_SHARE_TITLE, text }); 
         return; 
       }
     } catch (e) { 
