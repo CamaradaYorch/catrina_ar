@@ -77,18 +77,14 @@ function render() {
   // 3) Dibuja la textura WebGL sobre la malla 3D de los rostros
   const conMalla = dibujarMalla(ctx, smoothFaces, W, H);
 
-  // 4) Dibuja adornos, flores y maquillaje por código sobre cada rostro
+  // 4) Flores y hojas del diseño sobre cada rostro (con malla); sin malla, el diseño completo de respaldo
   smoothFaces.forEach(pts => {
     if (conMalla) {
-      const capas = diseno.flores
-        ? CONFIG.ADORNOS_SOBRE_CALAVERA.filter(n => n !== 'corona' && n !== 'mejillas')
-        : CONFIG.ADORNOS_SOBRE_CALAVERA;
-      dibujarMaquillaje(ctx, pts, W, H, capas);
       if (diseno.flores) dibujarDiseno(ctx, pts, W, H, 'flores');
     } else if (diseno.completo) {
-      dibujarDiseno(ctx, pts, W, H, 'completo'); // Sin malla: diseño de respaldo
+      dibujarDiseno(ctx, pts, W, H, 'completo');
     } else {
-      dibujarMaquillaje(ctx, pts, W, H, null);   // Último respaldo: dibujo 100% vectorial
+      dibujarMaquillaje(ctx, pts, W, H, null);   // Último respaldo: dibujo básico por código
     }
   });
 

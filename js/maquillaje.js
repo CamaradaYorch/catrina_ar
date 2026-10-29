@@ -1,11 +1,10 @@
 /* ==================================================
    CatrinART
-   MÓDULO: MAQUILLAJE DE CATRINA (único diseño)
+   MÓDULO: MAQUILLAJE DE RESPALDO (dibujado por código)
    ==================================================
-   Dibujo vectorial original, trazado con código sobre los puntos de la cara. Motivos tradicionales del
-   Día de Muertos: base blanca, cuencas con borde de cuentas, filigrana en la frente, nariz de calavera,
-   costuras en la boca, adorno en la barbilla y corona de flores de cempasúchil y rosas.
-   Para cambiar colores o tamaños, edita la paleta COLOR y los factores de cada bloque.
+   Solo se usa como ÚLTIMO RESPALDO cuando no cargan ni la malla con textura ni el diseño de assets/catrina-diseno.png.
+   Dibuja lo básico sobre los puntos de la cara: base blanca, cuencas con borde de cuentas, nariz de calavera y costuras
+   en la boca. Ya no incluye filigrana ni flores: el diseño real viene de la textura y de assets/catrina-flores.png.
    ================================================== */
 
 let COLOR = {
@@ -23,18 +22,6 @@ const OVALO = [10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,40
 const OJO_IZQ = [33,7,163,144,145,153,154,155,133,173,157,158,159,160,161,246];
 const OJO_DER = [362,382,381,380,374,373,390,249,263,466,388,387,386,385,384,398];
 const TAU = Math.PI * 2;
-
-/** Flor de capas (pétalos redondos): tonos = [exterior, medio, centro]. */
-function flor(c, x, y, r, tonos) {
-  [[1, 9, tonos[0]], [0.72, 7, tonos[1]], [0.42, 5, tonos[2]]].forEach(([k, n, col], j) => {
-    c.fillStyle = col; c.strokeStyle = 'rgba(0,0,0,.2)'; c.lineWidth = Math.max(1, r * 0.04);
-    for (let i = 0; i < n; i++) {
-      const a = i * TAU / n + j * 0.5;
-      c.beginPath(); c.arc(x + Math.cos(a) * r * k * 0.55, y + Math.sin(a) * r * k * 0.55, r * k * 0.5, 0, TAU);
-      c.fill(); c.stroke();
-    }
-  });
-}
 
 /** Dibuja el maquillaje sobre un rostro. pts = 478 puntos normalizados; W, H = tamaño del canvas. */
 function dibujarMaquillaje(c, pts, W, H, capas) {   // capas: lista de bloques a dibujar; null = todos (respaldo sin malla)
@@ -62,25 +49,6 @@ function dibujarMaquillaje(c, pts, W, H, capas) {   // capas: lista de bloques a
     g.addColorStop(0, COLOR.sombra); g.addColorStop(1, 'rgba(95,125,160,0)');
     c.fillStyle = g; punto(p, faceW * 0.3, true);
   });
-
-  }
-
-  if (ver('frente')) {
-  // 2) Frente: rombo central, línea con círculo, volutas y puntos
-  const f = P(9), d = faceW * 0.045;
-  c.strokeStyle = COLOR.tinta; c.lineWidth = trazo;
-  [-1, 1].forEach(s => {
-    const a = at(f, s * d, 0), b = at(f, s * faceW * 0.13, -faceH * 0.11), e = at(f, s * faceW * 0.24, -faceH * 0.06);
-    c.beginPath(); c.moveTo(a.x, a.y); c.quadraticCurveTo(b.x, b.y, e.x, e.y); c.stroke();
-    c.fillStyle = COLOR.tinta; punto(e, trazo * 1.4, true);
-    punto(at(f, s * faceW * 0.12, -faceH * 0.02), faceW * 0.02, false);
-  });
-  const top = at(f, 0, -faceH * 0.15);
-  c.beginPath(); c.moveTo(at(f, 0, -d).x, at(f, 0, -d).y); c.lineTo(top.x, top.y); c.stroke();
-  c.fillStyle = COLOR.base; punto(top, faceW * 0.02, true); punto(top, faceW * 0.02, false);
-  c.beginPath(); [at(f, 0, -d), at(f, d * 0.75, 0), at(f, 0, d * 1.2), at(f, -d * 0.75, 0)].forEach((p, i) => i ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y));
-  c.closePath(); c.fillStyle = COLOR.ambar; c.fill(); c.stroke();
-  c.fillStyle = COLOR.rojo; punto(f, d * 0.22, true);
 
   }
 
@@ -137,37 +105,6 @@ function dibujarMaquillaje(c, pts, W, H, capas) {   // capas: lista de bloques a
       c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke();
     }
   });
-
-  }
-
-  if (ver('barbilla')) {
-  // 6) Adorno en la barbilla: flor negra con centro blanco
-  const ch = at(P(152), 0, -faceH * 0.075);
-  c.fillStyle = COLOR.tinta;
-  for (let n = 0; n < 6; n++) { const t = n * TAU / 6 + roll; c.beginPath(); c.ellipse(ch.x + Math.cos(t) * faceW * 0.03, ch.y + Math.sin(t) * faceW * 0.03, faceW * 0.028, faceW * 0.016, t, 0, TAU); c.fill(); }
-  c.fillStyle = COLOR.base; punto(ch, faceW * 0.012, true);
-
-  }
-
-  // 6b) Flores en las mejillas
-  if (ver('mejillas')) {
-    [50, 280].forEach(k => { const p = P(k); flor(c, p.x, p.y, faceW * 0.06, [COLOR.vino, COLOR.rojo, COLOR.naranja]); });
-  }
-
-  if (ver('corona')) {
-  // 7) Corona: hojas y flores en arco sobre la frente
-  const cen = at(P(10), 0, faceH * 0.28), rxc = faceW * 0.66, ryc = faceH * 0.62, N = 9;
-  const pos = i => { const t = Math.PI * (1.04 + 0.92 * i / (N - 1)); return { p: at(cen, Math.cos(t) * rxc, Math.sin(t) * ryc), t }; };
-  c.fillStyle = COLOR.hoja;
-  for (let i = 0; i < N - 1; i++) {
-    const q = pos(i), r = pos(i + 1), m = { x: (q.p.x + r.p.x) / 2, y: (q.p.y + r.p.y) / 2 };
-    c.beginPath(); c.ellipse(m.x, m.y, faceW * 0.09, faceW * 0.035, (q.t + r.t) / 2 + Math.PI / 2, 0, TAU); c.fill();
-  }
-  const tonos = [[COLOR.naranja, COLOR.ambar, COLOR.amarillo], [COLOR.vino, COLOR.rojo, COLOR.naranja], [COLOR.amarillo, COLOR.ambar, COLOR.naranja]];
-  for (let i = 0; i < N; i++) {
-    const { p } = pos(i), grande = 1 - Math.abs(i - (N - 1) / 2) / N;
-    flor(c, p.x, p.y, faceW * (0.1 + 0.07 * grande), tonos[i % 3]);
-  }
 
   }
 

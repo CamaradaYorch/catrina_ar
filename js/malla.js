@@ -65,10 +65,11 @@ async function initMalla() {
       const texCanvas = document.createElement('canvas');
       texCanvas.width = texCanvas.height = side;
       const g = texCanvas.getContext('2d');
-      if (d.filtroCss && d.filtroCss !== 'none') {
-        g.filter = d.filtroCss;
-      }
+      const filtro = d.filtroCss && d.filtroCss !== 'none' ? d.filtroCss : null;
+      const nativo = 'filter' in g;                       // Safari/iOS antiguos no lo soportan
+      if (filtro && nativo) g.filter = filtro;
       g.drawImage(img, 0, 0, side, side);
+      if (filtro && !nativo) aplicarFiltroPixeles(g, side, filtro);
 
       const texture = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -133,4 +134,34 @@ function dibujarMalla(c, rostros, W, H) {
 
   c.drawImage(cv, 0, 0);
   return true;
+}
+
+
+/** Respaldo del filtro CSS (hue-rotate, saturate, sepia, contrast, brightness) aplicado píxel por píxel. Se hace una sola vez por diseño. */
+function aplicarFiltroPixeles(g, side, filtro) {
+  const ops = [...filtro.matchAll(/([\w-]+)\(([^)]*)\)/g)].map(m => [m[1], parseFloat(m[2])]);
+  const datos = g.getImageData(0, 0, side, side), d = datos.data;
+  const mats = ops.map(([n, v]) => {
+    if (n === 'hue-rotate') {
+      const t = v * Math.PI / 180, c = Math.cos(t), s = Math.sin(t);
+      return [.213 + c * .787 - s * .213, .715 - c * .715 - s * .715, .072 - c * .072 + s * .928,
+              .213 - c * .213 + s * .143, .715 + c * .285 + s * .140, .072 - c * .072 - s * .283,
+              .213 - c * .213 - s * .787, .715 - c * .715 + s * .715, .072 + c * .928 + s * .072];
+    }
+    if (n === 'saturate') return [.213 + .787 * v, .715 - .715 * v, .072 - .072 * v, .213 - .213 * v, .715 + .285 * v, .072 - .072 * v, .213 - .213 * v, .715 - .715 * v, .072 + .928 * v];
+    if (n === 'sepia') { const a = 1 - v; return [.393 + .607 * a, .769 - .769 * a, .189 - .189 * a, .349 - .349 * a, .686 + .314 * a, .168 - .168 * a, .272 - .272 * a, .534 - .534 * a, .131 + .869 * a]; }
+    return null;
+  });
+  const clamp = x => x < 0 ? 0 : x > 1 ? 1 : x;
+  for (let i = 0; i < d.length; i += 4) {
+    let r = d[i] / 255, gr = d[i + 1] / 255, b = d[i + 2] / 255;
+    for (let k = 0; k < ops.length; k++) {
+      const n = ops[k][0], v = ops[k][1], m = mats[k];
+      if (m) { const R = m[0] * r + m[1] * gr + m[2] * b, G = m[3] * r + m[4] * gr + m[5] * b, B = m[6] * r + m[7] * gr + m[8] * b; r = clamp(R); gr = clamp(G); b = clamp(B); }
+      else if (n === 'contrast') { r = clamp((r - .5) * v + .5); gr = clamp((gr - .5) * v + .5); b = clamp((b - .5) * v + .5); }
+      else if (n === 'brightness') { r = clamp(r * v); gr = clamp(gr * v); b = clamp(b * v); }
+    }
+    d[i] = r * 255; d[i + 1] = gr * 255; d[i + 2] = b * 255;
+  }
+  g.putImageData(datos, 0, 0);
 }

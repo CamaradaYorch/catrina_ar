@@ -32,7 +32,6 @@ const CONFIG = {
   TEXTURA_PX: 512,            // 512 px corre a 60 FPS ultra fluidos en móviles (1024 en equipos potentes)
   MALLA_CUBRIR_OJOS: true,     // true: la textura cubre también los ojos
   MALLA_CUBRIR_BOCA: false,    // false: al abrir la boca se ve la boca real
-  ADORNOS_SOBRE_CALAVERA: ['frente', 'mejillas', 'barbilla', 'corona'],   // Capas de maquillaje
   MAX_CANVAS_SIDE: 1280,       // Resolución máxima para fotos y videos exportados
   INTRO_LOGO_MS: 2500,         // Duración del logo del Centro Cultural al encender la app
   MOSTRAR_PROTOTIPO: true,     // true: marca de agua roja «PROTOTIPO». Ponlo en false al aprobar el proyecto
@@ -83,6 +82,30 @@ const CONFIG = {
       paletaMaquillaje: {
         tinta: '#1c1305', base: 'rgba(255,250,230,.96)', sombra: 'rgba(180,130,20,.35)',
         naranja: '#f59e0b', ambar: '#fbbf24', amarillo: '#fde047', rojo: '#dc2626', vino: '#991b1b', hoja: '#15803d'
+      }
+    },
+    {
+      id: 'rosa_mexicano',
+      nombre: 'Rosa Mexicano',
+      badge: '4',
+      desc: 'Rosa mexicano vibrante, alegre y festivo',
+      colorTema: '#ec4899',
+      filtroCss: 'sepia(0.5) hue-rotate(290deg) saturate(2.2) contrast(1.1)',
+      paletaMaquillaje: {
+        tinta: '#1a0a14', base: 'rgba(255,240,246,.95)', sombra: 'rgba(200,60,130,.35)',
+        naranja: '#f472b6', ambar: '#ec4899', amarillo: '#fde047', rojo: '#be185d', vino: '#831843', hoja: '#16a34a'
+      }
+    },
+    {
+      id: 'jade_olmeca',
+      nombre: 'Jade Olmeca',
+      badge: '5',
+      desc: 'Verde jade de las culturas mesoamericanas',
+      colorTema: '#22c55e',
+      filtroCss: 'sepia(0.6) hue-rotate(75deg) saturate(1.8) contrast(1.1)',
+      paletaMaquillaje: {
+        tinta: '#07140c', base: 'rgba(240,255,244,.95)', sombra: 'rgba(30,140,80,.35)',
+        naranja: '#34d399', ambar: '#10b981', amarillo: '#facc15', rojo: '#047857', vino: '#064e3b', hoja: '#15803d'
       }
     }
   ],

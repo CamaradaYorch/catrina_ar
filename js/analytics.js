@@ -92,22 +92,28 @@ const Analytics = {
   /** Cuenta activa según el modo de la marca PROTOTIPO. */
   modo: () => (typeof CONFIG !== 'undefined' && CONFIG.MOSTRAR_PROTOTIPO) ? 'prototipo' : 'produccion',
 
-  /** Muestra el número de la cuenta activa ('get') o le suma uno y lo muestra ('up'). */
+  /** Muestra el número de la cuenta activa ('get') o le suma uno y lo muestra ('up'). Siempre visible: si el servicio falla, muestra el último número conocido. */
   contador: async (accion) => {
     const box = document.getElementById('visitorCounter');
     const num = document.getElementById('visitorCountNum');
     if (!box || !num) return;
+    const modo = Analytics.modo();
+    const CACHE = 'catrinart_contador_' + modo;
+    const mostrar = n => { num.textContent = Number(n || 0).toLocaleString('es-MX'); box.classList.remove('hidden'); };
+    let ultimo = 0;
+    try { ultimo = parseInt(localStorage.getItem(CACHE) || '0', 10) || 0; } catch (e) {}
+    if (accion !== 'up') mostrar(ultimo);          // se ve de inmediato con el último valor conocido
     try {
-      const url = 'https://api.counterapi.dev/v1/catrinart_cct_oficial/usuarios_' + Analytics.modo() + (accion === 'up' ? '/up' : '');
+      const url = 'https://api.counterapi.dev/v1/catrinart_cct_oficial/usuarios_' + modo + (accion === 'up' ? '/up' : '');
       const res = await fetch(url);
-      if (res.status === 404) { num.textContent = '0'; box.classList.remove('hidden'); return; }   // aún no existe: va en cero
+      if (res.status === 404) { mostrar(0); return; }   // aún no existe: va en cero
       if (!res.ok) throw new Error('contador ' + res.status);
       const data = await res.json();
-      num.textContent = Number(data.count || 0).toLocaleString('es-MX');
-      box.classList.remove('hidden');
+      mostrar(data.count);
+      try { localStorage.setItem(CACHE, String(data.count || 0)); } catch (e) {}
     } catch (e) {
-      // Sin red o servicio no disponible: el contador simplemente no se muestra
-      if (accion !== 'up') box.classList.add('hidden');
+      console.warn('Contador no disponible:', e);
+      if (accion === 'up') mostrar(ultimo + 1);       // sin red: se muestra la suma local para no dejar la cifra congelada
     }
   }
 };
