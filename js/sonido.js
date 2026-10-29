@@ -57,6 +57,7 @@ const SONIDOS = {
 
 /** Sonido de cada botón por su id; los que no aparecen usan "click"; null = sin sonido (ya lo reproduce otra parte). */
 const MAPA_SONIDOS = {
+  btnCorona: 'switch',
   splashStart: null,                       // lo reproduce launchApp con "poweron"
   btnPhoto: 'shutter', btnVideo: 'rec',
   btnShare: 'share', btnBrandShare: 'share', modalShareBtn: 'share', modalWhatsappBtn: 'share', modalXBtn: 'share',

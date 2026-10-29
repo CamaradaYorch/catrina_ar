@@ -80,7 +80,7 @@ function render() {
   // 4) Flores y hojas del diseño sobre cada rostro (con malla); sin malla, el diseño completo de respaldo
   smoothFaces.forEach(pts => {
     if (conMalla) {
-      if (diseno.flores) dibujarDiseno(ctx, pts, W, H, 'flores');
+      if (diseno.flores && state.corona !== false) dibujarDiseno(ctx, pts, W, H, 'flores');   // corona de flores (botón 🌼)
     } else if (diseno.completo) {
       dibujarDiseno(ctx, pts, W, H, 'completo');
     } else {

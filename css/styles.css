@@ -309,10 +309,10 @@ body.is-front #pixelCanvas {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(0, 0, 0, .45);
+  background: rgba(0, 0, 0, .55);
   border: 1px solid rgba(255, 255, 255, .2);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  /* backdrop-filter: blur(6px);   (desactivado: desenfocar sobre el video en vivo ralentiza los celulares)
+  -webkit-backdrop-filter: blur(6px); */
   color: var(--amber);
 }
 

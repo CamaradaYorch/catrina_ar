@@ -36,10 +36,11 @@ async function initMalla() {
     };
     const prog = gl.createProgram();
     gl.attachShader(prog, sh(gl.VERTEX_SHADER, 'attribute vec2 p;attribute vec2 t;varying vec2 v;void main(){v=t;gl_Position=vec4(p,0.,1.);}'));
-    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, 'precision mediump float;uniform sampler2D x;varying vec2 v;void main(){gl_FragColor=texture2D(x,v);}'));
+    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, 'precision mediump float;uniform sampler2D x;uniform float a;varying vec2 v;void main(){gl_FragColor=texture2D(x,v)*a;}'));
     gl.linkProgram(prog);
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
     gl.useProgram(prog);
+    malla.locAlfa = gl.getUniformLocation(prog, 'a');   // opacidad del maquillaje (CONFIG.TEXTURA_OPACIDAD)
 
     const buf = (tipo, datos, uso) => {
       const b = gl.createBuffer();
@@ -88,6 +89,7 @@ async function initMalla() {
     malla.gl = gl;
     malla.cv = cv;
     malla.listo = true;
+    document.getElementById('btnCorona')?.classList.remove('invisible');   // el botón de corona aparece cuando la malla está lista
   } catch (e) {
     console.warn('Malla con textura no disponible; se usa el dibujo de respaldo:', e);
   }
@@ -104,6 +106,7 @@ function dibujarMalla(c, rostros, W, H) {
   gl.viewport(0, 0, W, H);
   gl.clearColor(0, 0, 0, 0);
   gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.uniform1f(malla.locAlfa, Math.min(1, Math.max(0, CONFIG.TEXTURA_OPACIDAD == null ? 1 : CONFIG.TEXTURA_OPACIDAD)));
 
   const totalTexturas = malla.texturas.length;
   const activoGlobal = (state.disenoIndex || 0) % totalTexturas;

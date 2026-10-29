@@ -114,6 +114,17 @@ $('btnChangeDesign')?.addEventListener('click', () => {
   }
 });
 
+/* ============ 02c. CORONA DE FLORES (activar / quitar) ============ */
+// Cada persona decide si quiere la corona; la textura de la calavera se usa siempre. Empieza activada.
+$('btnCorona')?.addEventListener('click', () => {
+  state.corona = !state.corona;
+  const b = $('btnCorona');
+  b.classList.toggle('is-off', !state.corona);
+  b.setAttribute('aria-pressed', String(state.corona));
+  setStatus(state.corona ? 'Corona de flores: activada' : 'Corona de flores: desactivada', 1800);
+  if (typeof trackEvent === 'function') trackEvent('toggle_corona', { activada: state.corona ? 'si' : 'no' });
+});
+
 /* ============ 03. COMPARTIR LA APLICACIÓN (logo, nombre «CatrinART» y botón de la cabecera) ============ */
 // Copian el mensaje amistoso con el enlace de la app (CONFIG.SITE_URL) y abren el menú de compartir.
 $('btnBrandLogo')?.addEventListener('click', shareApp);
@@ -146,6 +157,7 @@ const CRT_ON_MS = 1500;        // tiempo que dura el efecto de encendido (animac
 
 // Marca de agua «PROTOTIPO»: se quita con CONFIG.MOSTRAR_PROTOTIPO = false (o borrando su bloque en index.html)
 if (!CONFIG.MOSTRAR_PROTOTIPO) $('prototipoMarca')?.remove();
+else $('prototipoMarca')?.classList.add('is-on');   // la marca está oculta por CSS hasta este momento (sin destello al cargar)
 
 const splash = $('splashScreen');
 const splashStart = $('splashStart');

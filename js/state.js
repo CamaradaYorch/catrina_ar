@@ -36,6 +36,7 @@ const state = {
   mirrored: true,                   // Estado del modo espejo (true invierte horizontalmente la vista previa)
   isRecording: false,               // Indicador booleano de si hay una grabación de video en curso
   lastMedia: null,                  // Almacena la última captura: { type: 'image' | 'video', url, ext, mime, title }
+  corona: true,                     // true: se dibuja la corona de flores (botón 🌼 del lado derecho)
   disenoIndex: 0,                   // Índice del diseño activo en CONFIG.DISENOS (cambia con botón 🎨)
 };
 

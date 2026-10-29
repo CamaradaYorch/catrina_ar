@@ -26,7 +26,9 @@ const CONFIG = {
   FACE_MODEL: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',   // Modelo de detección de rostros
   MEDIAPIPE_MJS: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs',
   MEDIAPIPE_WASM: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm',
-  TEXTURA_SVG: 'assets/catrina-textura.svg',   // Diseño base del maquillaje sobre la malla (ver README)
+  // TEXTURA_SVG: 'assets/catrina-textura.svg',   // (versión anterior: SVG de ~6 MB, desactivada; el archivo sigue en assets/)
+  TEXTURA_SVG: 'assets/catrina-textura.webp',   // Diseño base del maquillaje sobre la malla: mismo dibujo en WebP ligero (~140 KB) con transparencia
+  TEXTURA_OPACIDAD: 0.85,      // Transparencia del maquillaje: 1 = cubre por completo, 0.85 = se transparenta un poco el rostro, 0.6 = se ve mucho más el rostro (0 a 1)
   DISENO_COMPLETO: 'assets/catrina-diseno.png',   // Respaldo: diseño completo (calavera + flores)
   DISENO_FLORES: 'assets/catrina-flores.png',     // Solo las flores y hojas
   TEXTURA_PX: 512,            // 512 px corre a 60 FPS ultra fluidos en móviles (1024 en equipos potentes)

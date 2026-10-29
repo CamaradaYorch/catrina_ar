@@ -17,9 +17,11 @@
 
 /* ============ Marca de agua «PROTOTIPO»: mosaico rojo sobre toda la pantalla; no bloquea toques ============ */
 .prototipo {
+  display: none;                  /* oculta por defecto: solo se muestra si main.js agrega la clase is-on (MOSTRAR_PROTOTIPO: true) */
   position: fixed; inset: 0; z-index: 9999; pointer-events: none;
   background: url('../assets/prototipo.svg') repeat center / clamp(260px, 38vw, 420px) auto;
 }
+.prototipo.is-on { display: block; }
 
 /* ============ Logo del Centro Cultural al encender la app (negro, centrado, adaptable) ============
    Duración total = CONFIG.INTRO_LOGO_MS (2.5 s). La capa negra se desvanece al final y deja ver la interfaz. */
@@ -182,3 +184,11 @@
   letter-spacing: .12em; text-transform: uppercase; text-decoration: none;
 }
 .footer__author:hover, .footer__author:focus-visible { text-decoration: underline; outline: none; }
+
+/* ============ Botón de corona de flores: atenuado y tachado cuando está desactivada ============ */
+#btnCorona { position: relative; }
+#btnCorona.is-off { opacity: .6; }
+#btnCorona.is-off::after {
+  content: ""; position: absolute; width: 56%; height: 2px; border-radius: 2px;
+  background: var(--amber); transform: rotate(-45deg); pointer-events: none;
+}
