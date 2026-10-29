@@ -76,28 +76,31 @@ const Analytics = {
   downloadMedia: (mediaType) => trackEvent('download_media', { media_type: mediaType }),
 
   /**
-   * CONTADOR (solo el número). Cuenta UNA vez por visita a cada persona que crea contenido (toma una foto o graba un video).
-   * - Se manda a Google Analytics como el evento «visita_creador» (siempre, con modo prototipo/produccion para poder filtrar).
-   * - El número visible del pie de página se suma con un servicio de conteo gratuito (CounterAPI) y solo cuando
-   *   CONFIG.MOSTRAR_PROTOTIPO = false, para que las pruebas no inflen la cifra.
+   * CONTADOR DE INTERACCIONES (solo el número). Suma UNO cada vez que alguien toma una foto o graba un video.
+   * Hay DOS cuentas independientes, para no mezclar las pruebas con el uso real:
+   *   - «prototipo»  : se usa mientras CONFIG.MOSTRAR_PROTOTIPO = true. Conserva su número entre sesiones de prueba.
+   *   - «produccion» : se usa cuando MOSTRAR_PROTOTIPO = false (proyecto aprobado). Empieza en 0 y, si vuelves a prototipo
+   *                    para corregir errores y luego regresas, continúa justo donde se quedó.
+   * Cada interacción también se manda a Google Analytics como el evento «visita_creador» (con el parámetro modo).
    */
   countCreator: async (tipo) => {
-    const FLAG = 'catrinart_contado';
-    try { if (sessionStorage.getItem(FLAG)) return; sessionStorage.setItem(FLAG, '1'); } catch (e) { /* sin sessionStorage: puede contar de más, no falla */ }
-
-    const enPrueba = !!(typeof CONFIG !== 'undefined' && CONFIG.MOSTRAR_PROTOTIPO);
-    trackEvent('visita_creador', { tipo, modo: enPrueba ? 'prototipo' : 'produccion' });
-    if (enPrueba) return;
+    const modo = Analytics.modo();
+    trackEvent('visita_creador', { tipo, modo });
     await Analytics.contador('up');
   },
 
-  /** Muestra el número actual del contador ('get') o suma uno y lo muestra ('up'). */
+  /** Cuenta activa según el modo de la marca PROTOTIPO. */
+  modo: () => (typeof CONFIG !== 'undefined' && CONFIG.MOSTRAR_PROTOTIPO) ? 'prototipo' : 'produccion',
+
+  /** Muestra el número de la cuenta activa ('get') o le suma uno y lo muestra ('up'). */
   contador: async (accion) => {
     const box = document.getElementById('visitorCounter');
     const num = document.getElementById('visitorCountNum');
     if (!box || !num) return;
     try {
-      const res = await fetch('https://api.counterapi.dev/v1/catrinart_cct_oficial/usuarios' + (accion === 'up' ? '/up' : ''));
+      const url = 'https://api.counterapi.dev/v1/catrinart_cct_oficial/usuarios_' + Analytics.modo() + (accion === 'up' ? '/up' : '');
+      const res = await fetch(url);
+      if (res.status === 404) { num.textContent = '0'; box.classList.remove('hidden'); return; }   // aún no existe: va en cero
       if (!res.ok) throw new Error('contador ' + res.status);
       const data = await res.json();
       num.textContent = Number(data.count || 0).toLocaleString('es-MX');
@@ -109,7 +112,5 @@ const Analytics = {
   }
 };
 
-// Al cargar la página solo se MUESTRA el número actual (no suma). Se oculta mientras el proyecto sea prototipo.
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof CONFIG !== 'undefined' && !CONFIG.MOSTRAR_PROTOTIPO) Analytics.contador('get');
-});
+// Al cargar la página solo se MUESTRA el número actual de la cuenta activa (no suma).
+document.addEventListener('DOMContentLoaded', () => Analytics.contador('get'));

@@ -170,7 +170,7 @@
 }
 
 /* ============ CONTADOR: SOLO EL NÚMERO ============ */
-.footer__counter { margin: 14px auto 0; text-align: center; }
+.footer__counter { margin: 10px auto 0; text-align: center; }
 .footer__counter.hidden { display: none !important; }
 .footer__counter-num {
   font-size: 15px; font-weight: 700; letter-spacing: .12em; color: var(--amber);
