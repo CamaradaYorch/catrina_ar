@@ -37,7 +37,7 @@ const CONFIG = {
   MEDIAPIPE_WASM_CDN: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm',
   // TEXTURA_SVG: 'assets/catrina-textura.svg',   // (versión anterior: SVG de ~6 MB, desactivada; el archivo sigue en assets/)
   TEXTURA_SVG: 'assets/catrina-textura.webp',   // Diseño base del maquillaje sobre la malla: mismo dibujo en WebP ligero (~140 KB) con transparencia
-  TEXTURA_OPACIDAD: 0.70,      // Transparencia del maquillaje: 1 = cubre por completo, 0.85 = se transparenta un poco el rostro, 0.6 = se ve mucho más el rostro (0 a 1)
+  TEXTURA_OPACIDAD: 0.85,      // Transparencia del maquillaje: 1 = cubre por completo, 0.85 = se transparenta un poco el rostro, 0.6 = se ve mucho más el rostro (0 a 1)
   DISENO_COMPLETO: 'assets/catrina-diseno.png',   // Respaldo: diseño completo (calavera + flores)
   DISENO_FLORES: 'assets/catrina-flores.png',     // Solo las flores y hojas
   TEXTURA_PX: 512,            // 512 px corre a 60 FPS ultra fluidos en móviles (1024 en equipos potentes)
@@ -119,6 +119,66 @@ const CONFIG = {
       paletaMaquillaje: {
         tinta: '#07140c', base: 'rgba(240,255,244,.95)', sombra: 'rgba(30,140,80,.35)',
         naranja: '#34d399', ambar: '#10b981', amarillo: '#facc15', rojo: '#047857', vino: '#064e3b', hoja: '#15803d'
+      }
+    },
+    {
+      id: 'violeta_mictlan',
+      nombre: 'Violeta Mictlán',
+      badge: '6',
+      desc: 'Lila y morado del inframundo mexicano',
+      colorTema: '#a78bfa',
+      filtroCss: 'sepia(0.6) hue-rotate(230deg) saturate(2) contrast(1.1)',
+      paletaMaquillaje: {
+        tinta: '#120a1f', base: 'rgba(248,244,255,.95)', sombra: 'rgba(120,80,200,.35)',
+        naranja: '#c4b5fd', ambar: '#a78bfa', amarillo: '#fde047', rojo: '#7c3aed', vino: '#4c1d95', hoja: '#16a34a'
+      }
+    },
+    {
+      id: 'fuego_ardiente',
+      nombre: 'Fuego Ardiente',
+      badge: '7',
+      desc: 'Naranja intenso, como el fuego del altar',
+      colorTema: '#f97316',
+      filtroCss: 'sepia(0.8) hue-rotate(-25deg) saturate(3) contrast(1.15)',
+      paletaMaquillaje: {
+        tinta: '#1a0d05', base: 'rgba(255,246,235,.95)', sombra: 'rgba(200,90,20,.35)',
+        naranja: '#fb923c', ambar: '#f97316', amarillo: '#fde047', rojo: '#c2410c', vino: '#7c2d12', hoja: '#4d7c0f'
+      }
+    },
+    {
+      id: 'plata_lunar',
+      nombre: 'Plata Lunar',
+      badge: '8',
+      desc: 'Blanco y negro elegante, plata a la luz de la luna',
+      colorTema: '#d4d4d8',
+      filtroCss: 'grayscale(1) contrast(1.15) brightness(1.1)',
+      paletaMaquillaje: {
+        tinta: '#0a0a0a', base: 'rgba(250,250,250,.95)', sombra: 'rgba(120,120,130,.35)',
+        naranja: '#d4d4d8', ambar: '#a1a1aa', amarillo: '#e4e4e7', rojo: '#52525b', vino: '#27272a', hoja: '#71717a'
+      }
+    },
+    {
+      id: 'turquesa_maya',
+      nombre: 'Turquesa Maya',
+      badge: '9',
+      desc: 'Turquesa brillante de las culturas mayas',
+      colorTema: '#22d3ee',
+      filtroCss: 'sepia(0.5) hue-rotate(140deg) saturate(2) brightness(1.05)',
+      paletaMaquillaje: {
+        tinta: '#06141a', base: 'rgba(240,253,255,.95)', sombra: 'rgba(20,150,170,.35)',
+        naranja: '#67e8f9', ambar: '#22d3ee', amarillo: '#fde047', rojo: '#0e7490', vino: '#164e63', hoja: '#15803d'
+      }
+    },
+    {
+      id: 'medianoche',
+      nombre: 'Medianoche',
+      badge: '10',
+      desc: 'Azul profundo de la noche de muertos',
+      colorTema: '#6366f1',
+      filtroCss: 'sepia(0.4) hue-rotate(200deg) saturate(1.4) brightness(0.75) contrast(1.25)',
+      paletaMaquillaje: {
+        tinta: '#05071a', base: 'rgba(238,242,255,.95)', sombra: 'rgba(70,80,190,.4)',
+        naranja: '#818cf8', ambar: '#6366f1', amarillo: '#fde047', rojo: '#3730a3', vino: '#1e1b4b', hoja: '#15803d'
       }
     }
   ],

@@ -8,12 +8,12 @@
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#040c2c">
 
-<!-- ============ METADATOS PARA COMPARTIR ============ -->
+<!-- Redes sociales -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CatrinART">
   <meta property="og:locale" content="es_MX">
   <meta property="og:title" content="CatrinART - Experiencia de Realidad Aumentada">
-  <!-- <meta property="og:description" content="¡Ven al Centro Cultural Teopanzolco y crea tu propia CatrinART en realidad aumentada para Día de Muertos!"> -->
+  <!-- <meta property="og:description" content="¡Ven al sitio y crea tu propia CatrinART en realidad aumentada para Día de Muertos!"> -->
   <meta property="og:description" content="¡Crea tu propia CatrinART con realidad aumentada para Día de Muertos!">
   <meta property="og:url" content="https://catrina-ar.netlify.app/">
   <meta property="og:image" content="https://catrina-ar.netlify.app/assets/preview.jpg?v=3">
@@ -22,34 +22,34 @@
   <!-- <meta property="og:image:alt" content="CatrinART - Efecto de realidad aumentada. Catrina con flores de cempasúchil y el logo del Centro Cultural Teopanzolco"> -->
   <meta property="og:image:alt" content="CatrinART - Experiencia de Realidad Aumentada. Catrina con flores de cempasúchil">
 
-  <!-- ============ METADATOS DE TWITTER / X ============ -->
+  <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CatrinART - Experiencia de Realidad Aumentada">
-  <!-- <meta name="twitter:description" content="¡Ven al Centro Cultural Teopanzolco y crea tu propia CatrinART en realidad aumentada para Día de Muertos!"> -->
+  <!-- <meta name="twitter:description" content="¡Ven al sitio y crea tu propia CatrinART en realidad aumentada para Día de Muertos!"> -->
   <meta name="twitter:description" content="¡Crea tu propia CatrinART con realidad aumentada para Día de Muertos!">
   <meta name="twitter:image" content="https://catrina-ar.netlify.app/assets/preview.jpg?v=3">
 
-  <!-- ============ ÍCONOS (favicon y logo: Catrinart.png) ============ -->
+  <!-- Íconos -->
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="img/icons/icon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="img/icons/icon-192.png">
   <link rel="apple-touch-icon" href="img/icons/icon-180.png">
   <link rel="manifest" href="manifest.webmanifest">
-  <!-- <link rel="preload" as="image" href="assets/logo-teo.png"> -->   <!-- (Teopanzolco) desactivado -->
-  <!-- <link rel="preload" as="image" href="assets/logo-app.svg"> -->   <!-- (SVG de ~0.9 MB: desactivado) -->
+  <!-- <link rel="preload" as="image" href="assets/logo-teo.png"> -->   <!-- (desactivado) -->
+  <!-- <link rel="preload" as="image" href="assets/logo-app.svg"> -->   <!-- (desactivado) -->
   <link rel="preload" as="image" href="assets/logo-app.webp">
 
-  <!-- ============ ESTILOS Y LIBRERÍAS ============ -->
+  <!-- Estilos -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/catrina.css">
   
-  <!-- Google Analytics 4 se carga desde js/analytics.js (ID en CONFIG.GA_MEASUREMENT_ID) -->
+  <!-- Analytics: js/analytics.js -->
 </head>
 <body>
 
-  <!-- MARCA «PROTOTIPO» DESACTIVADA (se conserva comentada; para volver a usarla quita este comentario y pon MOSTRAR_PROTOTIPO: true en js/config.js)
+  <!-- PROTOTIPO (desactivado; para activarlo quita este comentario y pon MOSTRAR_PROTOTIPO: true en config.js)
   [ ============ MARCA DE AGUA «PROTOTIPO» (cubre toda la pantalla) ============
        Para quitarla cuando el proyecto sea aprobado: pon MOSTRAR_PROTOTIPO: false en js/config.js
        (o borra / comenta este bloque; la app funciona igual sin él). ]
@@ -57,14 +57,14 @@
   [ ============ FIN MARCA DE AGUA ============ ]
   -->
 
-  <!-- ============ LOGO DEL CENTRO CULTURAL (aparece al encender la app, ~2.5 s) ============ -->
+  <!-- Logo de inicio (~2.5 s) -->
   <div id="introLogo" class="intro-logo hidden" aria-hidden="true">
-    <!-- <img src="assets/logo-teo.png" alt="Centro Cultural Teopanzolco"> -->   <!-- (Teopanzolco) desactivado -->
-    <!-- <img src="assets/logo-app.svg" alt="CatrinART"> -->   <!-- (SVG, desactivado: el WebP pesa ~180 KB) -->
+    <!-- <img src="assets/logo-teo.png" alt="Centro Cultural Teopanzolco"> -->   <!-- (desactivado) -->
+    <!-- <img src="assets/logo-app.svg" alt="CatrinART"> -->   <!-- (desactivado) -->
     <img src="assets/logo-app.webp" alt="CatrinART">
   </div>
 
-  <!-- ============ AVISO PARA NAVEGADORES INTERNOS (Facebook, Instagram, LinkedIn, TikTok…) ============ -->
+  <!-- Aviso: navegadores internos de redes -->
   <div id="inAppGate" class="gate hidden" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
     <div class="gate__card">
       <img class="gate__logo" src="img/logo.png" alt="" width="72" height="72">
@@ -80,10 +80,10 @@
     </div>
   </div>
   
-  <!-- ============ PANTALLA DE CARGA / ARCADE (SPLASH SCREEN) ============ -->
+  <!-- Pantalla de inicio -->
 <div id="splashScreen" class="splash">
   <div class="splash__content">
-    <!-- Logo principal de la app -->
+    <!-- Logo -->
     <img class="splash__logo" src="img/logo.png" alt="Logo de CatrinART" width="120" height="120">
     <h1 class="splash__title">CatrinART</h1>
     <!-- <p class="splash__subtitle">Centro Cultural Teopanzolco</p> -->
@@ -91,12 +91,12 @@
       <span style="color: var(--primary); font-weight: 700; font-size: 14px; letter-spacing: 1px;">AT arquitectos</span>
     </p>-->
     
-    <!-- Leyenda de inicio: aparece al terminar la animación y es lo único que enciende las cámaras -->
+    <!-- Botón de inicio (enciende la cámara) -->
     <button id="splashStart" class="splash__text" type="button" disabled>&gt; PULSA PARA COMENZAR &lt;</button>
   </div>
 </div>
 
-  <!-- ============ BANCO DE ÍCONOS SVG (Se reutilizan con <use>) ============ -->
+  <!-- Íconos SVG (se usan con <use>) -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
     <symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol>
@@ -112,7 +112,7 @@
     <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.8 0 1.5-.7 1.5-1.5 0-.4-.1-.7-.4-1-.3-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16c3.3 0 6-2.7 6-6 0-5.5-4.5-9-10-9z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="11.5" r="1.5" fill="currentColor"/><circle cx="10.5" cy="7.5" r="1.5" fill="currentColor"/><circle cx="14.5" cy="7.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="11.5" r="1.5" fill="currentColor"/></symbol>
   </svg>
 
-  <!-- ============ PANTALLA PRINCIPAL: Cámara y controles superpuestos ============ -->
+  <!-- Pantalla principal -->
   <section id="stage" class="stage">
     <video id="webcam" autoplay playsinline muted class="hidden"></video>
     <canvas id="pixelCanvas"></canvas>
@@ -120,13 +120,13 @@
     <!-- Barra superior -->
     <header class="topbar">
       <div class="brand">
-        <!-- El logotipo ahora también es un botón interactivo para compartir la app -->
+        <!-- Marca -->
         <button id="btnBrandLogo" class="brand__logo-btn" type="button"
           title="Toca para compartir CatrinART" aria-label="Compartir CatrinART con tus amigos">
           <img class="brand__image" src="img/logo.png" alt="Logo de CatrinART" width="48" height="48">
         </button>
         <div class="brand__text">
-          <!-- Al tocar el nombre se copia el enlace y se abre el menú de compartir -->
+          <!-- Tocar el nombre comparte la app -->
           <h1>
             <button id="btnBrandShare" class="brand__title" type="button"
               title="Toca para compartir CatrinART" aria-label="Compartir CatrinART con tus amigos">CatrinART</button>
@@ -135,9 +135,9 @@
         </div>
       </div>
 
-      <!-- Herramientas superiores -->
+      <!-- Herramientas -->
       <div class="tools">
-        <!-- Cambia diseño de Catrina (para 1 o hasta 3 personas) -->
+        <!-- Cambiar diseño -->
         <button
           id="btnChangeDesign"
           class="round round--palette"
@@ -148,7 +148,7 @@
           <span id="designBadge" class="design-badge">1</span>
         </button>
 
-        <!-- Alterna el modo espejo de la cámara -->
+        <!-- Espejo -->
         <button
           id="btnToggleMirror"
           class="round"
@@ -158,7 +158,7 @@
           <svg class="icon"><use href="#i-mirror"/></svg>
         </button>
 
-        <!-- Abre el menú nativo para compartir la aplicación -->
+        <!-- Compartir app -->
         <button
           id="btnShare"
           class="round"
@@ -168,7 +168,7 @@
           <svg class="icon"><use href="#i-share"/></svg>
         </button>
         
-        <!-- Cambia entre cámara frontal y trasera -->
+        <!-- Voltear cámara -->
         <button
           id="btnFlipCamera"
           class="round"
@@ -180,7 +180,7 @@
       </div>
     </header>
 
-    <!-- Tarjeta que explica el botón de paleta (se señala con una flecha; se cierra sola o al tocarla) -->
+    <!-- Aviso del botón de paleta -->
     <div id="designToast" class="design-toast hidden" role="status" aria-live="polite">
       <svg class="icon design-toast__icon" aria-hidden="true"><use href="#i-palette"/></svg>
       <div class="design-toast__info">
@@ -190,16 +190,16 @@
       <span class="design-toast__bar" aria-hidden="true"></span>
     </div>
 
-    <!-- Indicador de grabación de video -->
+    <!-- Indicador de grabación -->
     <div id="recBadge" class="rec hidden">
       <span class="rec__dot"></span>
       <span id="recTimer">REC</span>
     </div>
 
-    <!-- Mensaje de estado de carga -->
+    <!-- Estado -->
     <p id="statusMsg" class="status">Cargando cámara y modelo…</p>
 
-    <!-- Botones de captura (Disparadores inferiores) -->
+    <!-- Foto, video y corona -->
     <div class="controls">
       <button
         id="btnLast"
@@ -236,7 +236,7 @@
         <span id="videoLabel">Video</span>
       </button>
 
-      <!-- Activa o quita la corona de flores (aparece cuando la malla está lista) -->
+      <!-- Corona de flores (sí/no) -->
       <button
         id="btnCorona"
         class="round round--lg invisible"
@@ -248,7 +248,7 @@
       </button>
     </div>
 
-    <!-- Pantalla táctil de reanudación si el navegador suspende la cámara al cambiar de app -->
+    <!-- Reanudar cámara -->
     <div id="resumeOverlay" class="resume-overlay hidden" role="button" tabindex="0" aria-label="Toca para reanudar la cámara">
       <div class="resume-overlay__card">
         <svg class="icon icon--lg"><use href="#i-camera"/></svg>
@@ -256,7 +256,7 @@
       </div>
     </div>
 
-    <!-- Enlace inferior para ver créditos -->
+    <!-- Enlace a créditos -->
     <a
       href="#info"
       class="hint"
@@ -266,15 +266,15 @@
     </a>
   </section>
 
-  <!-- Efecto TV antigua (líneas de barrido y parpadeo al encender) -->
+  <!-- Efecto TV antigua -->
 <div id="crtOverlay" class="crt" aria-hidden="true"></div>
 
 
 
-<!-- ============ CRÉDITOS, REDES Y LEGAL ============ -->
+<!-- Créditos y legal -->
   <footer id="info" class="footer">
     <div class="footer__links">
-      <!-- (AT Arquitectos) desactivado; para volver a usarlo, quita este comentario y comenta el enlace de Jorge Mera
+      <!-- AT Arquitectos (desactivado; para usarlo quita este comentario y comenta el enlace de Jorge Mera)
       <a
         class="btn btn--at"
         href="https://beacons.ai/atarquitectos"
@@ -299,7 +299,7 @@
       >Jorge Mera</a>
     </div>
 
-    <!-- Contador en la página (desactivado: ahora el total se muestra en la consola del navegador, ver js/analytics.js)
+    <!-- Contador en la página (desactivado; el total va a la consola, ver analytics.js)
      Contador: solo el número de fotos y videos creados (debajo del botón de AT Arquitectos). Hay una cuenta para prototipo y otra para producción 
     <div id="visitorCounter" class="footer__counter" aria-label="Usuarios">
       <span id="visitorCountNum" class="footer__counter-num">0</span>
@@ -317,7 +317,7 @@
     </p>
   </footer>
 
-  <!-- ============ VISTA PREVIA Y COMPARTIR (MODAL) ============ -->
+  <!-- Vista previa y compartir -->
   <div id="previewModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal__card">
       
@@ -327,31 +327,31 @@
         <button id="btnClosePreview" class="modal__close" aria-label="Cerrar">&times;</button>
       </div>
 
-      <!-- Contenedor de la foto o video capturado -->
+      <!-- Foto o video capturado -->
       <div id="modalMedia" class="modal__media"></div>
       
-      <!-- Mensajes o notas de estado del archivo -->
+      <!-- Notas -->
       <p id="modalNote" class="modal__note"></p>
 
-      <!-- Botones de acción del modal -->
+      <!-- Acciones -->
       <div class="modal__actions">
-        <!-- Botón universal para celulares (oculto por defecto) -->
+        <!-- Compartir (celular) -->
         <button id="modalShareBtn" class="btn btn--share hidden">
           <svg class="icon"><use href="#i-share"/></svg>
           Compartir
         </button>
 
-        <!-- Botón específico de WhatsApp para PC (oculto por defecto) -->
+        <!-- WhatsApp (PC) -->
         <button id="modalWhatsappBtn" class="btn btn--wa hidden">
           <svg class="icon"><use href="#i-chat"/></svg>
         </button>
 
-        <!-- Botón específico de X para PC (oculto por defecto) -->
+        <!-- X (PC) -->
         <button id="modalXBtn" class="btn btn--x hidden">
           <svg class="icon icon--fill"><use href="#i-x"/></svg>
         </button>
 
-        <!-- Botón de guardar (siempre visible para ambos) -->
+        <!-- Guardar -->
         <button id="modalDownloadBtn" class="btn btn--dl">
           <svg class="icon"><use href="#i-download"/></svg>
           Guardar
@@ -361,28 +361,28 @@
     </div>
   </div>
 
-  <!-- ============ SCRIPTS DE LA APLICACIÓN ============ -->
-  <!-- El orden importa: cada archivo utiliza dependencias de los anteriores -->
-<!-- 1. Configuración global de la app -->
+  <!-- Scripts -->
+  <!-- Orden importante: cada archivo usa los anteriores -->
+<!-- Configuración -->
 <script src="js/config.js"></script>
 
-<!-- 1.1 Medición y Analítica (Google Analytics 4 gratuito) -->
+<!-- Analítica -->
 <script src="js/analytics.js"></script>
 
-<!-- 2. Estado global de la aplicación -->
+<!-- Estado -->
 <script src="js/state.js"></script>
 
-<!-- 2.1 Aviso para navegadores internos de redes sociales (usa $ de state.js) -->
+<!-- Navegadores internos -->
 <script src="js/inapp.js"></script>
 
 
-<!-- 4. IA y Segmentación -->
+<!-- Detección de rostros -->
 <script src="js/face.js"></script>
 
-<!-- 5. Gestión de Hardware y Cámara -->
+<!-- Cámara -->
 <script src="js/camera.js"></script>
 
-<!-- 6. Filtro Gráfico de Pixelado -->
+<!-- Dibujo -->
 <script src="js/maquillaje.js"></script>
 <script src="js/malla-datos.js"></script>
 <script src="js/malla.js"></script>
@@ -391,13 +391,13 @@
 <script src="js/sonido.js"></script>
 <script src="js/catrina.js"></script>
 
-<!-- 7. Funciones de Compartir (WhatsApp, X, etc.) -->
+<!-- Compartir -->
 <script src="js/share.js"></script>
 
-<!-- 8. Captura de Foto, Video y Descargas -->
+<!-- Captura -->
 <script src="js/capture.js"></script>
 
-<!-- 9. Lógica Principal e Inicialización (Se queda al final porque arranca la app) -->
+<!-- Principal (va al final) -->
 <script src="js/main.js"></script>
 </body>
 </html>
