@@ -29,3 +29,7 @@
 
 /manifest.webmanifest
   Content-Type: application/manifest+json
+
+# MediaPipe alojado en el sitio: archivos que no cambian -> caché de 1 año (si los actualizas, cambia el nombre de la carpeta)
+/vendor/*
+  Cache-Control: public, max-age=31536000, immutable

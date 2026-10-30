@@ -20,15 +20,24 @@ const CONFIG = {
   /* ============ 01. PARÁMETROS DE GRABACIÓN Y RESOLUCIÓN GRÁFICA ============ */
   RECORD_SECONDS: 10,           // Duración predeterminada de la grabación de video (en segundos)
   MAX_FACES: 3,                // Rostros simultáneos (hasta 3 personas)
+  FPS_MAX: 30,                 // Cuadros por segundo del dibujo (30 = fluido y gasta menos batería; sube a 60 solo en equipos potentes)
+  CALIDAD_AUTO: true,          // true: si el celular va lento, baja sola la resolución para mantener la fluidez (no vuelve a subir)
+  CALIDAD_MIN_LADO: 640,       // Resolución mínima a la que puede bajar la calidad automática
   DETECT_EVERY_MS: 66,         // Pausa entre detecciones de la IA (~15 por segundo, mientras el render corre a 60 FPS)
   FACE_INPUT_SIDE: 480,        // Lado largo para cámara frontal (selfie cercana, mínimo consumo de batería)
   FACE_INPUT_SIDE_REAR: 640,   // Lado largo para cámara trasera (permite detectar rostros a 1.5 - 2 metros)
-  FACE_MODEL: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',   // Modelo de detección de rostros
-  MEDIAPIPE_MJS: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs',
-  MEDIAPIPE_WASM: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm',
+  // MediaPipe alojado en TU sitio (carpeta vendor/mediapipe): no depende del wifi hacia Google ni jsDelivr y se guarda en caché.
+  // Si algo falla ahí, la app prueba automáticamente con los servidores externos de abajo (MEDIAPIPE_*_CDN y FACE_MODEL_CDN).
+  FACE_MODEL: 'vendor/mediapipe/face_landmarker.task',
+  MEDIAPIPE_MJS: new URL('vendor/mediapipe/vision_bundle.mjs', document.baseURI).href,
+  MEDIAPIPE_WASM: new URL('vendor/mediapipe/wasm', document.baseURI).href,
+  // ---- Respaldo externo (versión anterior, ahora solo si falla lo local) ----
+  FACE_MODEL_CDN: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+  MEDIAPIPE_MJS_CDN: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs',
+  MEDIAPIPE_WASM_CDN: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm',
   // TEXTURA_SVG: 'assets/catrina-textura.svg',   // (versión anterior: SVG de ~6 MB, desactivada; el archivo sigue en assets/)
-  TEXTURA_SVG: 'assets/catrina-textura.svg',   // Diseño base del maquillaje sobre la malla: mismo dibujo en WebP ligero (~140 KB) con transparencia
-  TEXTURA_OPACIDAD: 0.80,      // Transparencia del maquillaje: 1 = cubre por completo, 0.85 = se transparenta un poco el rostro, 0.6 = se ve mucho más el rostro (0 a 1)
+  TEXTURA_SVG: 'assets/catrina-textura.webp',   // Diseño base del maquillaje sobre la malla: mismo dibujo en WebP ligero (~140 KB) con transparencia
+  TEXTURA_OPACIDAD: 0.70,      // Transparencia del maquillaje: 1 = cubre por completo, 0.85 = se transparenta un poco el rostro, 0.6 = se ve mucho más el rostro (0 a 1)
   DISENO_COMPLETO: 'assets/catrina-diseno.png',   // Respaldo: diseño completo (calavera + flores)
   DISENO_FLORES: 'assets/catrina-flores.png',     // Solo las flores y hojas
   TEXTURA_PX: 512,            // 512 px corre a 60 FPS ultra fluidos en móviles (1024 en equipos potentes)
